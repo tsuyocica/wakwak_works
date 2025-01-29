@@ -69,3 +69,7 @@ end
 
 gem "pry-rails"
 gem "devise"
+
+group :production do
+  gem 'pg'
+end
