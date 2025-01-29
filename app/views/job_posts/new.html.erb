@@ -1,0 +1,49 @@
+<h2>新規案件作成</h2>
+
+<%= form_with(model: @job_post, local: true) do |f| %>
+  <div>
+    <%= f.label :work_title, "案件名" %>
+    <%= f.text_field :work_title, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :work_description, "仕事内容" %>
+    <%= f.text_area :work_description, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :work_capacity, "募集人数" %>
+    <%= f.number_field :work_capacity, required: true, min: 1 %>
+  </div>
+
+  <div>
+    <%= f.label :work_start_date, "作業開始日" %>
+    <%= f.date_field :work_start_date, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :work_end_date, "作業終了日" %>
+    <%= f.date_field :work_end_date, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :work_payment, "報酬 (円)" %>
+    <%= f.number_field :work_payment, required: true, min: 0 %>
+  </div>
+
+  <div>
+    <%= f.label :work_location, "作業場所" %>
+    <%= f.text_field :work_location, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :work_status, "募集状況" %>
+    <%= f.select :work_status, [["募集中", "recruiting"], ["締め切り", "closed"]] %>
+  </div>
+
+  <div>
+    <%= f.submit "登録", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to "戻る", job_posts_path, class: "btn btn-secondary" %>

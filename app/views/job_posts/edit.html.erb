@@ -1,0 +1,19 @@
+<h1><%= @job_post.work_title %></h1>
+
+<p><strong>施工管理者:</strong> <%= @job_post.user.username %></p>
+<p><strong>作業内容:</strong> <%= @job_post.work_description %></p>
+<p><strong>募集人数:</strong> <%= @job_post.work_capacity %> 名</p>
+<p><strong>作業開始日:</strong> <%= @job_post.work_start_date %></p>
+<p><strong>作業終了日:</strong> <%= @job_post.work_end_date %></p>
+<p><strong>報酬:</strong> <%= number_to_currency(@job_post.work_payment, unit: "¥", precision: 0) %></p>
+<p><strong>作業現場:</strong> <%= @job_post.work_location %></p>
+<p><strong>募集状況:</strong>
+  <% if @job_post.work_status == "recruiting" %>
+    <span class="badge bg-success">募集中</span>
+  <% else %>
+    <span class="badge bg-secondary">受付終了</span>
+  <% end %>
+</p>
+
+<%= link_to "編集", "#", class: "btn btn-warning" %> <%# # = edit_job_post_path(@job_post) %>
+<%= link_to "戻る", job_posts_path, class: "btn btn-secondary" %>
