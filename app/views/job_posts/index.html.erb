@@ -1,2 +1,36 @@
-<h1>JobPosts#index</h1>
-<p>Find me in app/views/job_posts/index.html.erb</p>
+<h1>作業案件一覧</h1>
+
+<%= link_to "新しい案件を投稿", new_job_post_path, class: "btn btn-primary" %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>場所</th>
+      <th>作業内容</th>
+      <th>作業開始日</th>
+      <th>作業終了日</th>
+      <th>報酬</th>
+      <th>募集状況</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @job_posts.each do |job| %>
+      <tr>
+        <td><%= job.work_location %></td>
+        <td><%= job.work_title %></td>
+        <td><%= job.work_start_date %></td>
+        <td><%= job.work_end_date %></td>
+        <td><%= number_to_currency(job.work_payment, unit: "¥", precision: 0) %></td>
+        <td>
+          <% if job.work_status == "recruiting" %>
+            <span class="badge bg-success">募集中</span>
+          <% else %>
+            <span class="badge bg-secondary">受付終了</span>
+          <% end %>
+        </td>
+        <td><%= link_to "詳細", job_post_path(job), class: "btn btn-info btn-sm" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
