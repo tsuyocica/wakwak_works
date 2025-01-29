@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  devise_for :users
+  root "job_posts#index" # ルートページを募集一覧に設定
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  resources :users, only: [:show] do # マイページ用
+    member do
+      # get :show_owner  # 依頼者用ページ
+      # get :show_worker # 作業員用ページ
+    end
+  end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resources :job_posts, only: [:index, :show, :new, :create] do # 作業員募集機能
+    resources :job_applications, only: [:create] # 応募処理は job_post にネスト
+  end
 end
