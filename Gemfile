@@ -69,6 +69,8 @@ end
 
 gem "pry-rails"
 gem "devise"
+gem 'bootstrap', '~> 5.2.3'
+gem 'jquery-rails'
 
 group :production do
   gem 'pg'
