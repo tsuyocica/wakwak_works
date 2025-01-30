@@ -9,6 +9,7 @@
       <th>作業終了日</th>
       <th>報酬</th>
       <th>募集状況</th>
+      <th>応募状況</th>
       <th></th>
     </tr>
   </thead>
@@ -20,7 +21,33 @@
         <td><%= job_list.work_start_date %></td>
         <td><%= job_list.work_end_date %></td>
         <td><%= number_to_currency(job_list.work_payment, unit: "¥", precision: 0) %></td>
-        <td><%= job_list.work_status == "recruiting" ? "募集中" : "受付終了" %></td>
+
+        <!-- 募集状況の色付け -->
+        <td>
+          <% if job_list.work_status == "recruiting" %>
+            <span class="badge bg-success">募集中</span>
+          <% else %>
+            <span class="badge bg-secondary">受付終了</span>
+          <% end %>
+        </td>
+
+        <!-- 応募状況の色付け -->
+        <td>
+          <% application = job_list.job_applications.find_by(worker: current_user) %>
+          <% if application %>
+            <% case application.status %>
+              <% when "pending" %>
+                <span class="badge bg-warning text-dark">保留中</span>
+              <% when "approved" %>
+                <span class="badge bg-success">承認</span>
+              <% when "rejected" %>
+                <span class="badge bg-danger">却下</span>
+            <% end %>
+          <% else %>
+            <span class="text-muted">未応募</span>
+          <% end %>
+        </td>
+
         <td><%= link_to "詳細", job_post_path(job_list), class: "btn btn-info btn-sm" %></td>
       </tr>
     <% end %>

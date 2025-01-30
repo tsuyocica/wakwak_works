@@ -3,23 +3,32 @@
     <%= link_to "WakwakWorks", root_path, class: "navbar-brand" %>
 
     <div class="d-flex">
-      <% if user_signed_in? %>
-        <span class="navbar-text me-3">
-          <strong><%= current_user.username %> さん</strong>
-        </span>
+      <!-- ログインページではログイン・新規登録ボタンを非表示 -->
+      <% unless controller_name == "sessions" && action_name == "new" %>
+        <% if user_signed_in? %>
+          <!-- ユーザー名の表示 -->
+          <span class="navbar-text me-3">
+            <strong><%= current_user.username %> さん</strong>
+          </span>
 
-        <% if current_user.role == "施工管理者" %>
-          <%= link_to "マイページ", show_manager_user_path(current_user), class: "btn btn-outline-primary me-2" %>
+          <!-- 役割ごとのマイページリンク -->
+          <% if current_user.role == "施工管理者" %>
+            <%= link_to "施工管理者マイページ", show_manager_user_path(current_user), class: "btn btn-outline-primary me-2" %>
+          <% else %>
+            <%= link_to "作業員マイページ", show_worker_user_path(current_user), class: "btn btn-outline-primary me-2" %>
+          <% end %>
+
+          <!-- ログアウトボタン -->
+          <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
         <% else %>
-          <%= link_to "マイページ", show_worker_user_path(current_user), class: "btn btn-outline-primary me-2" %>
+          <!-- 未ログイン時のログイン & 新規登録ボタン -->
+          <%= link_to "ログイン", new_user_session_path, class: "btn btn-primary me-2" %>
+          <%= link_to "新規登録", new_user_registration_path, class: "btn btn-success" %>
         <% end %>
-
-        <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
-      <% else %>
-        <%= link_to "ログイン", new_user_session_path, class: "btn btn-primary me-2" %>
-        <%= link_to "新規登録", new_user_registration_path, class: "btn btn-success" %>
       <% end %>
     </div>
+
+    <!-- トップページへのリンク -->
     <%= link_to "トップへ戻る", root_path, class: "btn btn-primary ms-3" %>
   </div>
 </header>
