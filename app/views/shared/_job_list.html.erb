@@ -1,0 +1,28 @@
+<h2><%= title %></h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>場所</th>
+      <th>作業内容</th>
+      <th>作業開始日</th>
+      <th>作業終了日</th>
+      <th>報酬</th>
+      <th>募集状況</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% job_lists.each do |job_list| %>
+      <tr>
+        <td><%= job_list.work_location %></td>
+        <td><%= job_list.work_title %></td>
+        <td><%= job_list.work_start_date %></td>
+        <td><%= job_list.work_end_date %></td>
+        <td><%= number_to_currency(job_list.work_payment, unit: "¥", precision: 0) %></td>
+        <td><%= job_list.work_status == "recruiting" ? "募集中" : "受付終了" %></td>
+        <td><%= link_to "詳細", job_post_path(job_list), class: "btn btn-info btn-sm" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

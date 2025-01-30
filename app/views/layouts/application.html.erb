@@ -11,6 +11,11 @@
   </head>
 
   <body>
-    <%= yield %>
+    <!-- ヘッダーを読み込む -->
+    <%= render "shared/header" %>
+
+    <div class="container mt-4">
+      <%= yield %>
+    </div>
   </body>
 </html>

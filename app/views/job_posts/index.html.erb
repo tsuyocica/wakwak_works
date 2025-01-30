@@ -1,28 +1,5 @@
 <h1>作業案件一覧</h1>
 
-<!-- ユーザー情報とログアウト -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <% if user_signed_in? %>
-    <div>
-      <strong><%= current_user.username %> さん</strong>
-      <%= link_to "マイページ", user_path(current_user), class: "btn btn-link" %>
-      <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
-    </div>
-  <% else %>
-    <%= link_to "ログイン", new_user_session_path, class: "btn btn-primary" %>
-  <% end %>
-</div>
-
-<!-- 新規登録ページへの遷移ボタン -->
-<div class="text-right mb-3">
-  <% unless user_signed_in? %>
-    <%= link_to "新規登録", new_user_registration_path, class: "btn btn-primary" %>
-  <% end %>
-</div>
-
-
-<%= link_to "新しい案件を投稿", new_job_post_path, class: "btn btn-primary" %>
-
 <table class="table">
   <thead>
     <tr>
