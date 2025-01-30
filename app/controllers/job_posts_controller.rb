@@ -5,7 +5,7 @@ class JobPostsController < ApplicationController
   end
 
     def show
-      @job_post = JobPost.find(params[:id]) # URLのIDから案件を取得
+    @job_post = JobPost.find(params[:id]) # URLのIDから案件を取得
     end
 
   def new

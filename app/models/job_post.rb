@@ -1,7 +1,7 @@
 class JobPost < ApplicationRecord
   # アソシエーション
   belongs_to :user  # 施工管理者（投稿者）
-  # has_many :job_applications, dependent: :destroy  # 作業員の応募
+  has_many :job_applications, dependent: :destroy  # 作業員の応募
   # has_many :chats, dependent: :destroy  # 案件ごとのチャット
 
   # バリデーション

@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   # 作業員マイページ
   def show_worker
-    # @job_applications = JobApplication.where(user: @user).includes(:job_post).order(created_at: :desc) # 作業員が応募した案件を取得
+    @job_applications = JobApplication.where(user: @user).includes(:job_post).order(created_at: :desc) # 作業員が応募した案件を取得
   end
 
   # ユーザー情報編集ページ
