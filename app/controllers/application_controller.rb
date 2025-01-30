@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   # Deviseのストロングパラメータ設定
   def configure_permitted_parameters
-    added_keys = [:username, :full_name, :furigana, :birth_date, :experience]
+    added_keys = [:username, :full_name, :furigana, :birth_date, :role, :experience, :qualification]
     devise_parameter_sanitizer.permit(:sign_up, keys: added_keys)
     devise_parameter_sanitizer.permit(:account_update, keys: added_keys)
   end
