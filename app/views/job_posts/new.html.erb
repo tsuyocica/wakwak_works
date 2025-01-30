@@ -1,49 +1,74 @@
-<h2>新規案件作成</h2>
+<div class="container mt-5">
+  <div class="card shadow-sm p-4">
+    <h2 class="mb-4 text-center fw-bold text-dark p-3 rounded" style="background-color: #f8f9fa; font-size: 1.75rem;">新規案件作成</h2>
 
-<%= form_with(model: @job_post, local: true) do |f| %>
-  <div>
-    <%= f.label :work_title, "案件名" %>
-    <%= f.text_field :work_title, required: true %>
+    <%= form_with(model: @job_post, local: true) do |f| %>
+      <div class="row">
+        <!-- 左カラム -->
+        <div class="col-md-6">
+          <div class="mb-3">
+            <%= f.label :work_title, "案件名", class: "form-label fw-bold" %>
+            <%= f.text_field :work_title, class: "form-control", required: true %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :work_description, "仕事内容", class: "form-label fw-bold" %>
+            <%= f.text_area :work_description, class: "form-control", rows: 4, required: true %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :work_capacity, "募集人数", class: "form-label fw-bold" %>
+            <%= f.number_field :work_capacity, class: "form-control", required: true, min: 1 %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :work_payment, "報酬 (円)", class: "form-label fw-bold" %>
+            <%= f.number_field :work_payment, class: "form-control", required: true, min: 0 %>
+          </div>
+        </div>
+
+        <!-- 右カラム -->
+        <div class="col-md-6">
+          <div class="mb-3">
+            <%= f.label :work_start_date, "作業開始日", class: "form-label fw-bold" %>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+              <%= f.date_field :work_start_date, class: "form-control", required: true %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :work_end_date, "作業終了日", class: "form-label fw-bold" %>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+              <%= f.date_field :work_end_date, class: "form-control", required: true %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :work_location, "作業場所", class: "form-label fw-bold" %>
+            <%= f.text_field :work_location, class: "form-control", required: true %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :work_status, "募集状況", class: "form-label fw-bold" %><br>
+            <div class="form-check form-check-inline">
+              <%= f.radio_button :work_status, "recruiting", id: "recruiting", class: "form-check-input" %>
+              <%= f.label :recruiting, "募集中", class: "form-check-label" %>
+            </div>
+            <div class="form-check form-check-inline">
+              <%= f.radio_button :work_status, "closed", id: "closed", class: "form-check-input" %>
+              <%= f.label :closed, "締め切り", class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ボタン -->
+      <div class="d-flex justify-content-center mt-4">
+        <%= f.submit "登録", class: "btn btn-primary px-4 py-2 me-3" %>
+        <%= link_to "戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2" %>
+      </div>
+    <% end %>
   </div>
-
-  <div>
-    <%= f.label :work_description, "仕事内容" %>
-    <%= f.text_area :work_description, required: true %>
-  </div>
-
-  <div>
-    <%= f.label :work_capacity, "募集人数" %>
-    <%= f.number_field :work_capacity, required: true, min: 1 %>
-  </div>
-
-  <div>
-    <%= f.label :work_start_date, "作業開始日" %>
-    <%= f.date_field :work_start_date, required: true %>
-  </div>
-
-  <div>
-    <%= f.label :work_end_date, "作業終了日" %>
-    <%= f.date_field :work_end_date, required: true %>
-  </div>
-
-  <div>
-    <%= f.label :work_payment, "報酬 (円)" %>
-    <%= f.number_field :work_payment, required: true, min: 0 %>
-  </div>
-
-  <div>
-    <%= f.label :work_location, "作業場所" %>
-    <%= f.text_field :work_location, required: true %>
-  </div>
-
-  <div>
-    <%= f.label :work_status, "募集状況" %>
-    <%= f.select :work_status, [["募集中", "recruiting"], ["締め切り", "closed"]] %>
-  </div>
-
-  <div>
-    <%= f.submit "登録", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<%= link_to "戻る", job_posts_path, class: "btn btn-secondary" %>
+</div>
