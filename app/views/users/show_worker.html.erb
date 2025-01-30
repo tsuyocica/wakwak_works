@@ -1,0 +1,12 @@
+<h1><%= @user.username %> さんのマイページ（作業員）</h1>
+
+<!-- 施工管理者マイページへのリンク -->
+<div class="mb-3">
+  <%= link_to "施工管理者マイページへ", show_manager_user_path(@user), class: "btn btn-outline-primary" %>
+</div>
+
+<!-- プロフィール情報（共通パーシャル） -->
+  <%= render "shared/profile", user: @user %>
+
+<!-- 応募した案件一覧（共通パーシャル） -->
+<%= render "shared/job_list", title: "応募した案件一覧", job_lists: @job_applications.map(&:job_post) %>

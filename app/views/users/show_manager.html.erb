@@ -1,0 +1,17 @@
+<h1><%= @user.username %> さんのマイページ（施工管理者）</h1>
+
+<!-- 作業員マイページへのリンク -->
+<div class="mb-3">
+  <%= link_to "作業員マイページへ", show_worker_user_path(@user), class: "btn btn-outline-primary" %>
+</div>
+
+<!-- プロフィール情報（共通パーシャル） -->
+<%= render "shared/profile", user: @user %>
+
+<!-- 新しい案件を投稿するボタン -->
+<div class="mb-3">
+  <%= link_to "新しい案件を投稿", new_job_post_path, class: "btn btn-success" %>
+</div>
+
+<!-- 投稿した案件一覧（共通パーシャル） -->
+<%= render "shared/job_list", title: "投稿した案件一覧", job_lists: @job_posts %>

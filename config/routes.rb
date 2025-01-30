@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: "users/registrations" # カスタムコントローラーを適用
+  }
   root "job_posts#index" # ルートページを募集一覧に設定
 
-  resources :users, only: [:show] do # マイページ用
+  resources :users, only: [:show, :edit, :update, :destroy] do
     member do
-      get :show_manager  # 施工管理者用ページ
-      get :show_worker   # 作業員用ページ
+      get :show_manager  # 施工管理者マイページページ
+      get :show_worker   # 作業員マイページページ
     end
   end
 
