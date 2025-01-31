@@ -16,8 +16,7 @@ https://wakwak-works.onrender.com/
 
 # テスト用アカウント
 
-ログイン機能等を実装した場合は、ログインに必要な情報を記載。 Basic 認証等を設け
-ている場合は、その ID/Pass も記載すること。
+Basic 認証 ID : admin Pass : 2222
 
 # 利用方法
 
