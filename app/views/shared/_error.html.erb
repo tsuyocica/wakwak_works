@@ -1,0 +1,10 @@
+<% if object && object.errors.any? %>
+  <div class="alert alert-danger">
+    <h4 class="mb-3">入力内容に誤りがあります</h4>
+    <ul>
+      <% object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
