@@ -2,7 +2,10 @@
   <div class="card shadow-sm p-4">
     <h2 class="mb-4 text-center">新規登録</h2>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <!-- エラーメッセージの表示 -->
+    <%= render "shared/error_messages", object: resource %>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { novalidate: true }) do |f| %>
       <div class="row">
         <!-- 左側のカラム -->
         <div class="col-md-6">
