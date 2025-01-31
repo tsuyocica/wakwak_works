@@ -3,7 +3,10 @@
     <!-- タイトル -->
     <h1 class="mb-4 text-center fw-bold text-dark p-3 rounded" style="background-color: #f8f9fa; font-size: 1.75rem;">案件の編集</h1>
 
-    <%= form_with(model: @job_post, local: true) do |f| %>
+    <!-- エラーメッセージの表示 -->
+    <%= render "shared/error_messages", object: @job_post %>
+
+    <%= form_with(model: @job_post, local: true, html: { novalidate: true }) do |f| %>
       <div class="row">
         <!-- 左カラム -->
         <div class="col-md-6">
