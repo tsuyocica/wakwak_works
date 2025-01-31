@@ -4,12 +4,10 @@ Rails.application.routes.draw do
   }
   root "job_posts#index" # ルートページを募集一覧に設定
 
-  resources :users, only: [:show, :edit, :update, :destroy] do
-    member do
-      get :show_manager  # 施工管理者マイページページ
-      get :show_worker   # 作業員マイページページ
-    end
-  end
+  # 🔹 ユーザーの役割を切り替えるルート（施工管理者⇔作業員）
+  patch "users/switch_role", to: "users#switch_role", as: "switch_role_users"
+
+  resources :users, only: [:show, :edit, :update, :destroy]
 
   resources :job_posts do # 作業員募集機能
     resources :job_applications, only: [:create, :destroy] # 応募機能は job_post にネスト
