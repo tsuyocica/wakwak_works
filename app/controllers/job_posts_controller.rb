@@ -1,5 +1,5 @@
 class JobPostsController < ApplicationController
-  before_action :authenticate_user! # ログイン必須
+  before_action :authenticate_user!, except: [:index] # ログイン必須
   before_action :set_job_post, only: [:show, :edit, :update, :destroy]
 
   def index
