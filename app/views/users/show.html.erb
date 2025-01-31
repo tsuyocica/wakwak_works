@@ -1,7 +1,7 @@
 <h2 class="mb-3 text-center fw-bold">
   <%= @user.username %> さんのマイページ
-  <span class="badge <%= @user.role == '施工管理者' ? 'bg-success' : 'bg-primary' %>">
-    <%= @user.role %>
+  <span class="badge <%= @user.role.include?('施工管理者') ? 'bg-success' : 'bg-primary' %>">
+    <%= Array(@user.role).join(", ") %>  <!-- 配列の場合はカンマ区切りで表示 -->
   </span>
 </h2>
 
@@ -9,8 +9,9 @@
 <%= render "shared/profile", user: @user %>
 
 <!-- 投稿・応募一覧 -->
-<% if @user.role == "施工管理者" %>
+<% if @user.role.include?("施工管理者") %>
   <%= render "shared/job_list", title: "投稿した案件一覧", job_lists: @job_posts %>
+  <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-primary mt-3" %>  <!-- 投稿ボタンを追加 -->
 <% else %>
   <%= render "shared/job_list", title: "応募した案件一覧", job_lists: @job_applications.map(&:job_post) %>
 <% end %>

@@ -37,9 +37,15 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :full_name, null: false, comment: "本名"
       t.string :furigana, null: false, comment: "ふりがな"
       t.date :birth_date, null: false, comment: "生年月日"
-      t.string :role, null: false, comment: "ユーザーの役割（施工管理者 or 作業員）"
       t.text :experience, null: false, comment: "経験・スキル"
       t.string :qualification, comment: "資格（例: 第二種電気工事士）"
+
+      # 環境ごとに `json` / `jsonb` を切り替え
+      if ActiveRecord::Base.connection.adapter_name.downcase.include?("postgresql")
+        t.jsonb :role, null: false, comment: "ユーザーの役割（施工管理者 or 作業員）"
+      else
+        t.json :role, null: false, comment: "ユーザーの役割（施工管理者 or 作業員）"
+      end
 
       t.timestamps null: false
     end
