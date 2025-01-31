@@ -42,7 +42,9 @@ Gyazo で、GIF は GyazoGIF で撮影すること。
 
 ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させる。現状は以下の通り）
 
-データベース設計 MVP **📌 テーブル一覧**
+## **データベース設計（最新版）**
+
+## **🗂 テーブル一覧**
 
 - **Users**（ユーザー管理機能）
 - **JobPosts**（作業員募集機能）
@@ -53,42 +55,46 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 
 ---
 
-## **📌 Users テーブル（ユーザー）**
+## **📝 Users テーブル（ユーザー）**
 
-| Column        | Type   | Options     | 説明                                   |
-| ------------- | ------ | ----------- | -------------------------------------- |
-| role          | string | null: false | ユーザーの役割（施工管理者 or 作業員） |
-| username      | string | null: false | ユーザー名                             |
-| full_name     | string | null: false | 本名                                   |
-| furigana      | string | null: false | ふりがな                               |
-| birth_date    | date   | null: false | 生年月日                               |
-| experience    | text   | null: false | 経験・スキル（簡易テキスト）           |
-| qualification | string |             | 資格（例: 第二種電気工事士）           |
-| address       | string |             | 住所（将来的に追加可能）               |
-| phone_number  | string |             | 電話番号（将来的に追加可能）           |
+| Column             | Type     | Options                   | 説明                                                        |
+| ------------------ | -------- | ------------------------- | ----------------------------------------------------------- |
+| email              | string   | null: false, unique: true | メールアドレス                                              |
+| encrypted_password | string   | null: false               | パスワード（Devise）                                        |
+| username           | string   | null: false, unique: true | ユーザー名                                                  |
+| full_name          | string   | null: false               | 本名                                                        |
+| furigana           | string   | null: false               | ふりがな                                                    |
+| birth_date         | date     | null: false               | 生年月日                                                    |
+| role               | json     | null: false               | **ユーザーの役割（["施工管理者", "作業員"] など複数可能）** |
+| experience         | text     | null: false               | 経験・スキル                                                |
+| qualification      | string   |                           | 資格（例: 第二種電気工事士）                                |
+| created_at         | datetime | null: false               | 作成日時                                                    |
+| updated_at         | datetime | null: false               | 更新日時                                                    |
 
 ✅ **アソシエーション**
 
-- `has_many :job_posts, dependent: :destroy`（if role is '施工管理者'）
-- `has_many :job_applications, dependent: :destroy`（if role is '作業員'）
+- `has_many :job_posts, dependent: :destroy`
+- `has_many :job_applications, dependent: :destroy`
 - `has_many :received_reviews, class_name: 'Review', foreign_key: 'reviewee_id', dependent: :destroy`
 - `has_many :given_reviews, class_name: 'Review', foreign_key: 'reviewer_id', dependent: :destroy`
 
 ---
 
-## **📌 JobPosts テーブル（作業案件）**
+## **📝 JobPosts テーブル（作業案件）**
 
-| Column           | Type       | Options                        | 説明                           |
-| ---------------- | ---------- | ------------------------------ | ------------------------------ |
-| user_id          | references | null: false, foreign_key: true | 施工管理者（投稿者）の外部キー |
-| work_title       | string     | null: false                    | 仕事のタイトル                 |
-| work_description | text       | null: false                    | 仕事内容の説明                 |
-| work_capacity    | integer    | null: false                    | 募集人数                       |
-| work_start_date  | date       | null: false                    | 作業開始日                     |
-| work_end_date    | date       | null: false                    | 作業終了日                     |
-| work_payment     | integer    | null: false                    | 報酬（日本円）                 |
-| work_location    | string     | null: false                    | 作業現場の住所                 |
-| work_status      | string     | default: "recruiting"          | 募集状況（募集中 or 締め切り） |
+| Column           | Type     | Options                        | 説明                          |
+| ---------------- | -------- | ------------------------------ | ----------------------------- |
+| user_id          | bigint   | null: false, foreign_key: true | 施工管理者（投稿者）の ID     |
+| work_title       | string   | null: false                    | 仕事のタイトル                |
+| work_description | text     | null: false                    | 仕事内容の説明                |
+| work_capacity    | integer  | null: false                    | 募集人数                      |
+| work_start_date  | date     | null: false                    | 作業開始日                    |
+| work_end_date    | date     | null: false                    | 作業終了日                    |
+| work_payment     | integer  | null: false                    | 報酬（日本円）                |
+| work_location    | string   | null: false                    | 作業現場の住所                |
+| work_status      | string   | default: "recruiting"          | 募集状況（募集中 / 受付終了） |
+| created_at       | datetime | null: false                    | 作成日時                      |
+| updated_at       | datetime | null: false                    | 更新日時                      |
 
 ✅ **アソシエーション**
 
@@ -98,29 +104,35 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 
 ---
 
-## **📌 JobApplications テーブル（応募管理）**
+## **📝 JobApplications テーブル（作業員の応募）**
 
-| Column      | Type       | Options                        | 説明                                 |
-| ----------- | ---------- | ------------------------------ | ------------------------------------ |
-| user_id     | references | null: false, foreign_key: true | 応募者の外部キー                     |
-| job_post_id | references | null: false, foreign_key: true | 対象の作業案件の外部キー             |
-| status      | string     | default: "pending"             | 応募ステータス（承認待ち・確定など） |
+| Column      | Type     | Options                        | 説明                                                |
+| ----------- | -------- | ------------------------------ | --------------------------------------------------- |
+| user_id     | bigint   | null: false, foreign_key: true | **応募した作業員の ID**                             |
+| job_post_id | bigint   | null: false, foreign_key: true | 応募先の案件 ID                                     |
+| status      | string   | default: "pending"             | **応募のステータス（pending, approved, rejected）** |
+| created_at  | datetime | null: false                    | 作成日時                                            |
+| updated_at  | datetime | null: false                    | 更新日時                                            |
 
 ✅ **アソシエーション**
 
 - `belongs_to :user`
 - `belongs_to :job_post`
 
+※ `message` カラムは後から実装予定。
+
 ---
 
-## **📌 Reviews テーブル（レビュー管理）**
+## **📝 Reviews テーブル（レビュー）**
 
-| Column      | Type       | Options                        | 説明                      |
-| ----------- | ---------- | ------------------------------ | ------------------------- |
-| reviewer_id | references | null: false, foreign_key: true | 評価をしたユーザーの ID   |
-| reviewee_id | references | null: false, foreign_key: true | 評価を受けたユーザーの ID |
-| rating      | integer    | null: false                    | 評価スコア（1〜5）        |
-| comment     | text       |                                | レビューコメント          |
+| Column      | Type     | Options                                        | 説明                              |
+| ----------- | -------- | ---------------------------------------------- | --------------------------------- |
+| reviewer_id | bigint   | null: false, foreign_key: { to_table: :users } | **レビューをしたユーザーの ID**   |
+| reviewee_id | bigint   | null: false, foreign_key: { to_table: :users } | **レビューを受けるユーザーの ID** |
+| rating      | float    | null: false                                    | 評価スコア（1.0〜5.0）            |
+| comment     | text     |                                                | レビューのコメント                |
+| created_at  | datetime | null: false                                    | 作成日時                          |
+| updated_at  | datetime | null: false                                    | 更新日時                          |
 
 ✅ **アソシエーション**
 
@@ -129,36 +141,13 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 
 ---
 
-## **📌 Chats & Messages テーブル（チャット管理）**
+## **📌 変更点**
 
-| Column      | Type       | Options                        | 説明            |
-| ----------- | ---------- | ------------------------------ | --------------- |
-| job_post_id | references | null: false, foreign_key: true | 作業案件の ID   |
-| owner_id    | references | null: false, foreign_key: true | 施工管理者の ID |
-| worker_id   | references | null: false, foreign_key: true | 作業員の ID     |
+1. **JobApplications から `message` カラムを削除し、後から実装する形に変更**
+2. **その他の構成は変更なし**
 
-✅ **アソシエーション**
-
-- `belongs_to :job_post`
-- `belongs_to :owner, class_name: 'User'`
-- `belongs_to :worker, class_name: 'User'`
-- `has_many :messages, dependent: :destroy`
-
----
-
-## **📌 Messages テーブル（メッセージ管理）**
-
-| Column    | Type       | Options                        | 説明           |
-| --------- | ---------- | ------------------------------ | -------------- |
-| chat_id   | references | null: false, foreign_key: true | チャットの ID  |
-| sender_id | references | null: false, foreign_key: true | 送信者の ID    |
-| content   | text       | null: false                    | メッセージ内容 |
-| read      | boolean    | default: false                 | 既読フラグ     |
-
-✅ **アソシエーション**
-
-- `belongs_to :chat`
-- `belongs_to :sender, class_name: 'User'`
+✅ **ユーザーが両方の役割を持てるようになった** ✅ **マッチングとチャットの管理
+がしやすくなった** ✅ **応募状況やチャットの状態を適切に管理できる**
 
 # 画面遷移図
 
@@ -174,10 +163,11 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 
 # 工夫したポイント
 
-制作背景使用技術
-
 - Bootstrap を利用したデザイン
-- Ajax を使うことで、ページ遷移なしに動的に更新可能にした
+- Ajax を使うことでチャット機能を追加、またページ遷移なしに動的に更新可能（予定
+  ）
+- GoogleMap API を利用した現在地から現場までの距離の把握、現場情報のプロット（予
+  定）
 
 タスク管理
 
