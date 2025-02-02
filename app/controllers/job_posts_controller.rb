@@ -44,6 +44,12 @@ class JobPostsController < ApplicationController
     redirect_to job_posts_path, notice: "案件を削除しました。"
   end
 
+  # 案件一覧ページ
+  def applicants
+    @job_post = JobPost.find(params[:id])
+    @applicants = @job_post.job_applications.includes(:worker) # 応募者情報を取得
+  end
+
   private
 
   def set_job_post
