@@ -2,22 +2,20 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>投稿者名</th>
         <th>作業場所</th>
         <th>作業内容</th>
         <th>開始日</th>
         <th>終了日</th>
         <th>報酬</th>
         <th>募集状況</th>
-        <th>応募状況</th>
-        <th>チャット</th>
+        <th>応募の有無</th>
+        <th>チャット一覧</th>
         <th>詳細</th>
       </tr>
     </thead>
     <tbody>
       <% job_lists.each do |job| %>
         <tr>
-          <td><%= job.user.username %></td>
           <td><%= job.work_location %></td>
           <td><%= job.work_description %></td>
           <td><%= job.work_start_date %></td>
@@ -31,17 +29,17 @@
             <% end %>
           </td>
           <td>
-            <% if job.job_applications.exists?(worker: current_user) %>
-              <span class="badge bg-info">応募済み</span>
+            <% if job.job_applications.any? %>
+              <span class="badge bg-info"><%= job.job_applications.count %> 件の応募</span>
             <% else %>
-              <span class="badge bg-secondary">未応募</span>
+              <span class="badge bg-secondary">応募なし</span>
             <% end %>
           </td>
           <td>
-            <% if job.job_applications.exists?(worker: current_user) %>
-              <%= link_to "チャットを開く", "#", class: "btn btn-primary btn-sm" %> <%#chat_path(job.chat)%>
+            <% if job.job_applications.any? %>
+              <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
             <% else %>
-              <span class="text-muted">未応募</span>
+              <span class="text-muted">なし</span>
             <% end %>
           </td>
           <td>
