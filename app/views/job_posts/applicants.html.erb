@@ -1,0 +1,84 @@
+<div class="container mt-5">
+  <!-- 案件タイトル -->
+  <h1 class="fw-bold text-center text-dark p-3 rounded" style="background-color: #f8f9fa;">
+    <%= @job_post.work_title %>
+  </h1>
+
+  <!-- 応募者一覧タイトル -->
+  <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">
+    応募者一覧
+  </h3>
+
+  <!-- 応募者テーブル -->
+  <table class="table table-striped mt-3">
+    <thead>
+      <tr>
+        <th>応募日時</th>
+        <th>応募者</th>
+        <th>経験・スキル</th>
+        <th>応募の状態</th>
+        <th>チャットルーム</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @applicants.each do |application| %>
+        <tr>
+          <%# 応募日時 %>
+          <td><%= application.created_at.strftime('%Y/%m/%d %H:%M') %></td>
+
+          <%# 応募者名（マイページへのリンク） %>
+          <td>
+            <%= link_to application.worker.username, user_path(application.worker), class: "text-primary fw-bold" %>
+          </td>
+
+          <%# 経験・スキル %>
+          <td><%= truncate(application.worker.experience, length: 50, omission: "…") %></td>
+
+          <%# 応募の状態（非同期更新ボタン） %>
+          <td>
+            <select class="form-select application-status" data-application-id="<%= application.id %>">
+              <option value="pending" <%= "selected" if application.status == "pending" %>>未承認</option>
+              <option value="approved" <%= "selected" if application.status == "approved" %>>承認</option>
+              <option value="rejected" <%= "selected" if application.status == "rejected" %>>却下</option>
+            </select>
+          </td>
+
+          <%# チャットルーム（承認済みならリンク表示） %>
+          <td>
+            <% if application.status == "approved" %>
+              <%= link_to "チャットを開く", "#", class: "btn btn-primary btn-sm chat-room-link" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".application-status").forEach(select => {
+      select.addEventListener("change", function() {
+        const applicationId = this.dataset.applicationId;
+        const newStatus = this.value;
+
+        fetch(`/job_applications/${applicationId}/update_status`, {
+          method: "PATCH",
+          headers: {
+            "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ status: newStatus })
+        }).then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert("応募の状態を更新しました！");
+              location.reload(); // ページをリロード
+            } else {
+              alert("更新に失敗しました");
+            }
+          });
+      });
+    });
+  });
+</script>
