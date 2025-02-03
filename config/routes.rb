@@ -22,4 +22,9 @@ Rails.application.routes.draw do
       get :applicants  # 応募者一覧ページ（施工管理者用）
     end
   end
+
+  # **チャット機能のルート**
+  resources :chats, only: [:index, :show] do
+    resources :messages, only: [:create] # メッセージ送信
+  end
 end
