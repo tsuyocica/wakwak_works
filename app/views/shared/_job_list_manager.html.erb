@@ -4,8 +4,7 @@
       <tr>
         <th>作業場所</th>
         <th>作業内容</th>
-        <th>開始日</th>
-        <th>終了日</th>
+        <th>作業期間</th>
         <th>報酬</th>
         <th>募集状況</th>
         <th>応募の有無</th>
@@ -16,11 +15,24 @@
     <tbody>
       <% job_lists.each do |job| %>
         <tr>
+          <%# 作業場所 %>
           <td><%= job.work_location %></td>
-          <td><%= job.work_description %></td>
-          <td><%= job.work_start_date %></td>
-          <td><%= job.work_end_date %></td>
-          <td><%= number_to_currency(job.work_payment, unit: "¥", precision: 0) %></td>
+
+          <%# 作業内容（文字制限 + 省略）%>
+          <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= job.work_description %>">
+            <%= truncate(job.work_description, length: 60, omission: "…") %>
+          </td>
+
+          <%# 作業期間（開始日 & 終了日を2段に）%>
+          <td>
+            <span><%= job.work_start_date.strftime('%Y/%m/%d') %></span><br>
+            〜 <span><%= job.work_end_date.strftime('%Y/%m/%d') %></span>
+          </td>
+
+          <%# 報酬（フォーマット統一）%>
+          <td><%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></td>
+
+          <%# 募集状況 %>
           <td>
             <% if job.work_status == "recruiting" %>
               <span class="badge bg-success">募集中</span>
@@ -28,20 +40,29 @@
               <span class="badge bg-secondary">受付終了</span>
             <% end %>
           </td>
+
+          <%# 応募の有無（件数 + 応募者一覧リンク）%>
           <td>
             <% if job.job_applications.any? %>
-              <span class="badge bg-info"><%= job.job_applications.count %> 件の応募</span>
+              <div class="d-flex flex-column align-items-start">
+                <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span>
+                <%= link_to "応募者一覧を見る", applicants_job_post_path(job), class: "text-primary mt-1 text-decoration-none" %>
+              </div>
             <% else %>
               <span class="badge bg-secondary">応募なし</span>
             <% end %>
           </td>
+
+          <%# チャット一覧 %>
           <td>
             <% if job.job_applications.any? %>
-              <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
+              <%= link_to "チャット一覧", "#", class: "btn btn-primary btn-sm disabled" %> <%# chats_path(job_id: job.id) に後で変更 %>
             <% else %>
               <span class="text-muted">なし</span>
             <% end %>
           </td>
+
+          <%# 詳細 %>
           <td>
             <%= link_to "詳細", job_post_path(job), class: "btn btn-info btn-sm" %>
           </td>
