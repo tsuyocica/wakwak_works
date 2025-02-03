@@ -1,0 +1,13 @@
+<div class="col-md-3 bg-light p-3 border rounded">
+  <h5 class="fw-bold">💬 チャット一覧</h5>
+  <ul class="list-group">
+    <% @chat_list.each do |chat| %>
+      <% partner = chat.owner == current_user ? chat.worker : chat.owner %>
+      <li class="list-group-item">
+        <%= link_to chat_path(chat), class: "text-dark d-flex align-items-center" do %>
+          <span class="fw-bold"><%= partner.username %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

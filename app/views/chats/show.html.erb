@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <div class="row">
+    <%= render "chats/sidebar" %> <!-- 共通サイドバー -->
+
+    <!-- 右側のメッセージ表示エリア -->
+    <div class="col-md-9 border rounded p-3">
+      <!-- チャットのタイトル -->
+      <h5 class="fw-bold text-center border-bottom pb-2">
+        <%= @chat.job_post.work_title %> - <%= @partner.username %> さんとのチャット
+      </h5>
+
+      <!-- メッセージ一覧 -->
+      <div class="chat-messages mt-3">
+        <% @messages.each do |message| %>
+          <%= render "messages/message", message: message %>
+        <% end %>
+      </div>
+
+      <!-- メッセージ送信フォーム -->
+      <%= form_with(model: [@chat, Message.new], local: false, html: { multipart: true }) do |f| %>
+        <div class="input-group mt-3">
+          <%= f.text_area :content, class: "form-control", placeholder: "メッセージを入力" %>
+          <%= f.file_field :images, multiple: true, class: "form-control-file d-none", id: "image-upload" %>
+          <%= f.file_field :files, multiple: true, class: "form-control-file d-none", id: "file-upload" %>
+          <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('image-upload').click()">📷</button>
+          <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('file-upload').click()">📎</button>
+          <%= f.submit "送信", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
