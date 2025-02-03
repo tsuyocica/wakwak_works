@@ -1,0 +1,27 @@
+<div class="d-flex align-items-start mt-2">
+  <div class="message-container <%= message.sender == current_user ? 'text-end ms-auto' : 'text-start' %>">
+    <strong><%= message.sender.username %></strong>
+    <span class="text-muted small"> <%= message.created_at.strftime('%Y/%m/%d %H:%M') %> </span>
+    <div class="message-content border rounded p-2">
+      <% if message.content.present? %>
+        <p><%= message.content %></p>
+      <% end %>
+
+      <% if message.images.attached? %>
+        <% message.images.each do |image| %>
+          <div>
+            <%= image_tag image, class: "img-thumbnail", width: "150" %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if message.files.attached? %>
+        <% message.files.each do |file| %>
+          <div>
+            <%= link_to file.filename, rails_blob_path(file, disposition: "attachment"), class: "btn btn-link" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
