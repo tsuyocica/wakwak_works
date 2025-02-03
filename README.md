@@ -125,12 +125,12 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 
 ## **📝 Chats テーブル（チャットルーム）**
 
-| Column      | Type     | Options                        | 説明                    |
-| ----------- | -------- | ------------------------------ | ----------------------- |
-| job_post_id | bigint   | null: false, foreign_key: true | 関連する作業案件 ID     |
-| user_id     | bigint   | null: false, foreign_key: true | 作業員または管理者の ID |
-| created_at  | datetime | null: false                    | 作成日時                |
-| updated_at  | datetime | null: false                    | 更新日時                |
+| Column      | Type     | Options                                        | 説明                    |
+| ----------- | -------- | ---------------------------------------------- | ----------------------- |
+| job_post_id | bigint   | null: false, foreign_key: true                 | 関連する作業案件 ID     |
+| user_id     | bigint   | null: false, foreign_key: { to_table: :users } | 作業員または管理者の ID |
+| created_at  | datetime | null: false                                    | 作成日時                |
+| updated_at  | datetime | null: false                                    | 更新日時                |
 
 ✅ **アソシエーション**
 
@@ -142,14 +142,14 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 
 ## **📝 Messages テーブル（メッセージ管理）**
 
-| Column     | Type     | Options                        | 説明                |
-| ---------- | -------- | ------------------------------ | ------------------- |
-| chat_id    | bigint   | null: false, foreign_key: true | チャットルーム ID   |
-| sender_id  | bigint   | null: false, foreign_key: true | 送信者のユーザー ID |
-| content    | text     |                                | メッセージ内容      |
-| read       | boolean  | default: false                 | 既読フラグ          |
-| created_at | datetime | null: false                    | 作成日時            |
-| updated_at | datetime | null: false                    | 更新日時            |
+| Column     | Type     | Options                                        | 説明                |
+| ---------- | -------- | ---------------------------------------------- | ------------------- |
+| chat_id    | bigint   | null: false, foreign_key: true                 | チャットルーム ID   |
+| sender_id  | bigint   | null: false, foreign_key: { to_table: :users } | 送信者のユーザー ID |
+| content    | text     |                                                | メッセージ内容      |
+| read       | boolean  | default: false                                 | 既読フラグ          |
+| created_at | datetime | null: false                                    | 作成日時            |
+| updated_at | datetime | null: false                                    | 更新日時            |
 
 ✅ **アソシエーション**
 
