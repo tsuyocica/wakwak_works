@@ -59,8 +59,17 @@
 
           <%# チャットルーム（承認済みならリンク表示） %>
           <td class="text-center align-middle" id="chat-room-<%= application.id %>">
+            <% chat = Chat.find_by(job_post: application.job_post, worker: application.worker) %>
             <% if application.status == "approved" %>
-              <%= link_to "チャットを作成", chats_path(job_post_id: application.job_post.id, worker_id: application.worker.id), method: :post, class: "btn btn-primary btn-sm chat-room-link" %>
+              <% if chat.present? %>
+                <%= link_to "チャットを開く", chat_path(chat), class: "btn btn-success btn-sm chat-room-link" %>
+              <% else %>
+                <%= form_with url: chats_path, method: :post, local: true do |form| %>
+                  <%= form.hidden_field :job_post_id, value: application.job_post.id %>
+                  <%= form.hidden_field :worker_id, value: application.worker.id %>
+                  <%= form.submit "チャットを作成", class: "btn btn-primary btn-sm" %>
+                <% end %>
+              <% end %>
             <% else %>
               <span class="text-muted">-</span>
             <% end %>
