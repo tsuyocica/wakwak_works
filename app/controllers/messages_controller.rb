@@ -9,7 +9,6 @@ class MessagesController < ApplicationController
 
     if @message.save
       respond_to do |format|
-        format.html { redirect_to chat_path(@chat), notice: "メッセージを送信しました。" }
         format.json # ここでJS側と連携（後で実装）
       end
     else

@@ -3,7 +3,7 @@ class JobPostsController < ApplicationController
   before_action :set_job_post, only: [:show, :edit, :update, :destroy]
 
   def index
-    @job_posts = JobPost.where(work_status: "recruiting").order(created_at: :desc) # 募集中の案件を表示
+    @job_posts = JobPost.all.order(created_at: :desc) # 募集中の案件を表示
   end
 
   def show

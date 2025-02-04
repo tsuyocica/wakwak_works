@@ -22,6 +22,7 @@ export default class extends Controller {
       return;
     }
 
+    // 正しいURLに修正
     fetch(
       `/job_posts/${jobPostId}/job_applications/${applicationId}/update_status`,
       {
@@ -34,26 +35,29 @@ export default class extends Controller {
         body: JSON.stringify({ status: newStatus }),
       }
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.success) {
-          console.log("応募の状態更新成功:", data.status);
+          console.log("✅ 応募の状態更新成功:", data.status);
 
-          // ✅ Bootstrapアイコンを利用して状態を更新
+          // **アイコンの更新**
           if (statusIcon) {
-            if (newStatus === "approved") {
-              statusIcon.innerHTML = `<i class="bi bi-check-circle-fill text-success"></i>`; // 承認アイコン
-            } else if (newStatus === "rejected") {
-              statusIcon.innerHTML = `<i class="bi bi-x-circle-fill text-danger"></i>`; // 却下アイコン
-            } else {
-              statusIcon.innerHTML = "";
-            }
+            statusIcon.innerHTML =
+              data.status === "approved"
+                ? `<i class="bi bi-check-circle-fill text-success"></i>`
+                : data.status === "rejected"
+                ? `<i class="bi bi-x-circle-fill text-danger"></i>`
+                : "";
           }
 
-          // ✅ チャットルーム表示を更新
+          // **チャットルームのボタンを動的に変更**
           if (chatRoomCell) {
-            if (newStatus === "approved") {
-              // `POST /chats` のリクエストを実行するボタンを設置
+            if (data.status === "approved") {
               chatRoomCell.innerHTML = `
                 <form action="/chats" method="POST">
                   <input type="hidden" name="authenticity_token" value="${
@@ -69,11 +73,11 @@ export default class extends Controller {
             }
           }
         } else {
-          alert("更新に失敗しました");
+          alert("⚠️ 更新に失敗しました");
         }
       })
       .catch((error) => {
-        console.error("エラー:", error);
+        console.error("❌ エラー:", error);
       });
   }
 }

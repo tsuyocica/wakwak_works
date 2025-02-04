@@ -1,15 +1,22 @@
-<% if flash.any? %>
+<div class="flash-container position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1050;">
   <% flash.each do |type, message| %>
-    <% bootstrap_class = case type.to_sym
-      when :notice then "alert-success"
-      when :alert then "alert-danger"
-      when :error then "alert-danger"
-      else "alert-info"
-    end %>
-
-    <div class="alert <%= bootstrap_class %> alert-dismissible fade show" role="alert">
+    <div class="alert alert-<%= bootstrap_class_for(type) %> alert-dismissible fade show shadow-sm flash-message" role="alert">
       <%= message %>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   <% end %>
-<% end %>
+</div>
+
+<script>
+  function hideFlashMessages() {
+    setTimeout(function() {
+      document.querySelectorAll('.flash-message').forEach(function(message) {
+        let bsAlert = new bootstrap.Alert(message);
+        bsAlert.close();
+      });
+    }, 3000); // 3秒後に自動で消える
+  }
+
+  document.addEventListener("turbo:load", hideFlashMessages);
+  document.addEventListener("DOMContentLoaded", hideFlashMessages);
+</script>

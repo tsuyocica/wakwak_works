@@ -1,2 +1,20 @@
 @import "bootstrap";
 @import "reset";
+
+/* メッセージリストのスタイル（Bootstrapで補完） */
+.messages-list {
+  max-height: calc(100vh - 300px); /* 画面全体の高さからヘッダー＆フッター分を引く */
+  overflow-y: auto; /* スクロール可能 */
+}
+
+/* flashメッセージをポップアップ風のデザインに調整 */
+.flash-container {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.alert {
+  opacity: 0.95;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
