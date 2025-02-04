@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   end
 
   # **チャット機能のルート**
-  resources :chats, only: [:index, :show] do
+  resources :chats, only: [:index, :show, :create] do
     resources :messages, only: [:create] # メッセージ送信
   end
 end
