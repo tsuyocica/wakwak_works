@@ -48,9 +48,9 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 - **Users**（ユーザー管理機能）
 - **JobPosts**（作業員募集機能）
 - **JobApplications**（作業員の応募機能）
-- **Reviews**（レビュー管理機能）
 - **Chats**（案件ごとのチャット機能）
 - **Messages**（メッセージ管理機能）
+- **Reviews**（レビュー管理機能）実装予定
 
 ---
 
@@ -67,6 +67,7 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 | role               | json     | null: false               | **ユーザーの役割（["施工管理者", "作業員"] など複数可能）** |
 | experience         | text     | null: false               | 経験・スキル                                                |
 | qualification      | string   |                           | 資格（例: 第二種電気工事士）                                |
+| avatar             | string   |                           | プロフィール画像（Active Storage）                          |
 | created_at         | datetime | null: false               | 作成日時                                                    |
 | updated_at         | datetime | null: false               | 更新日時                                                    |
 
@@ -76,6 +77,8 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 - `has_many :job_applications, dependent: :destroy`
 - `has_many :received_reviews, class_name: 'Review', foreign_key: 'reviewee_id', dependent: :destroy`
 - `has_many :given_reviews, class_name: 'Review', foreign_key: 'reviewer_id', dependent: :destroy`
+- `has_many :chats, dependent: :destroy`
+- `has_one_attached :avatar` # プロフィール画像
 
 ---
 
@@ -107,7 +110,7 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 
 | Column      | Type     | Options                        | 説明                                                |
 | ----------- | -------- | ------------------------------ | --------------------------------------------------- |
-| user_id     | bigint   | null: false, foreign_key: true | **応募した作業員の ID**                             |
+| worker_id   | bigint   | null: false, foreign_key: true | **応募した作業員の ID**                             |
 | job_post_id | bigint   | null: false, foreign_key: true | 応募先の案件 ID                                     |
 | status      | string   | default: "pending"             | **応募のステータス（pending, approved, rejected）** |
 | created_at  | datetime | null: false                    | 作成日時                                            |
@@ -118,35 +121,41 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 - `belongs_to :user`
 - `belongs_to :job_post`
 
-※ `message` カラムは後から実装予定。
-
 ---
 
-## **📝 Reviews テーブル（レビュー）**
+## **📝 Chats テーブル（チャットルーム）**
 
-| Column      | Type     | Options                                        | 説明                              |
-| ----------- | -------- | ---------------------------------------------- | --------------------------------- |
-| reviewer_id | bigint   | null: false, foreign_key: { to_table: :users } | **レビューをしたユーザーの ID**   |
-| reviewee_id | bigint   | null: false, foreign_key: { to_table: :users } | **レビューを受けるユーザーの ID** |
-| rating      | float    | null: false                                    | 評価スコア（1.0〜5.0）            |
-| comment     | text     |                                                | レビューのコメント                |
-| created_at  | datetime | null: false                                    | 作成日時                          |
-| updated_at  | datetime | null: false                                    | 更新日時                          |
+| Column      | Type     | Options                                        | 説明                    |
+| ----------- | -------- | ---------------------------------------------- | ----------------------- |
+| job_post_id | bigint   | null: false, foreign_key: true                 | 関連する作業案件 ID     |
+| user_id     | bigint   | null: false, foreign_key: { to_table: :users } | 作業員または管理者の ID |
+| created_at  | datetime | null: false                                    | 作成日時                |
+| updated_at  | datetime | null: false                                    | 更新日時                |
 
 ✅ **アソシエーション**
 
-- `belongs_to :reviewer, class_name: 'User'`
-- `belongs_to :reviewee, class_name: 'User'`
+- `belongs_to :job_post`
+- `belongs_to :user`
+- `has_many :messages, dependent: :destroy`
 
 ---
 
-## **📌 変更点**
+## **📝 Messages テーブル（メッセージ管理）**
 
-1. **JobApplications から `message` カラムを削除し、後から実装する形に変更**
-2. **その他の構成は変更なし**
+| Column     | Type     | Options                                        | 説明                |
+| ---------- | -------- | ---------------------------------------------- | ------------------- |
+| chat_id    | bigint   | null: false, foreign_key: true                 | チャットルーム ID   |
+| sender_id  | bigint   | null: false, foreign_key: { to_table: :users } | 送信者のユーザー ID |
+| content    | text     |                                                | メッセージ内容      |
+| read       | boolean  | default: false                                 | 既読フラグ          |
+| created_at | datetime | null: false                                    | 作成日時            |
+| updated_at | datetime | null: false                                    | 更新日時            |
 
-✅ **ユーザーが両方の役割を持てるようになった** ✅ **マッチングとチャットの管理
-がしやすくなった** ✅ **応募状況やチャットの状態を適切に管理できる**
+✅ **アソシエーション**
+
+- `belongs_to :chat`
+- `belongs_to :sender, class_name: 'User'`
+- `has_many_attached :files` # メッセージごとに複数ファイル添付可能
 
 # 画面遷移図
 

@@ -52,10 +52,21 @@ export default class extends Controller {
 
           // ✅ チャットルーム表示を更新
           if (chatRoomCell) {
-            chatRoomCell.innerHTML =
-              newStatus === "approved"
-                ? `<a href="#" class="btn btn-primary btn-sm">チャットを開く</a>`
-                : `<span class="text-muted">-</span>`;
+            if (newStatus === "approved") {
+              // `POST /chats` のリクエストを実行するボタンを設置
+              chatRoomCell.innerHTML = `
+                <form action="/chats" method="POST">
+                  <input type="hidden" name="authenticity_token" value="${
+                    document.querySelector('meta[name="csrf-token"]').content
+                  }">
+                  <input type="hidden" name="job_post_id" value="${jobPostId}">
+                  <input type="hidden" name="worker_id" value="${applicationId}">
+                  <button type="submit" class="btn btn-primary btn-sm">チャットを作成</button>
+                </form>
+              `;
+            } else {
+              chatRoomCell.innerHTML = `<span class="text-muted">-</span>`;
+            }
           }
         } else {
           alert("更新に失敗しました");

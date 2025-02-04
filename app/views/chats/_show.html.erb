@@ -1,0 +1,39 @@
+<div class="chat-header bg-light p-2 text-center fw-bold">
+  <%= @chat.job_post.work_title %> - <%= @partner.username %> さんとのチャット
+</div>
+
+<div class="chat-box border rounded p-3 mt-3" style="height: 400px; overflow-y: auto;">
+  <% @messages.each do |message| %>
+    <div class="mb-3">
+      <strong><%= message.sender.username %></strong>
+      <span class="text-muted small"><%= message.created_at.strftime('%Y/%m/%d %H:%M') %></span>
+      <p class="mt-1"><%= message.content.presence || "📎 添付ファイルあり" %></p>
+
+      <% if message.images.attached? %>
+        <% message.images.each do |image| %>
+          <img src="<%= url_for(image) %>" alt="添付画像" class="img-thumbnail mb-2" style="max-width: 150px;">
+        <% end %>
+      <% end %>
+
+      <% if message.files.attached? %>
+        <div>
+          <% message.files.each do |file| %>
+            📎 <%= link_to file.filename, url_for(file), target: "_blank", class: "text-primary" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-3">
+  <%= form_with model: [@chat, Message.new], local: false, class: "d-flex align-items-center" do |f| %>
+    <%= f.text_area :content, placeholder: "メッセージを入力...", class: "form-control me-2", rows: 1 %>
+    <%= f.file_field :images, multiple: true, accept: "image/*", class: "d-none", id: "image-upload" %>
+    <%= f.file_field :files, multiple: true, accept: ".pdf,.doc,.xls,.ppt,.zip", class: "d-none", id: "file-upload" %>
+
+    <label for="image-upload" class="btn btn-outline-secondary me-2">📷</label>
+    <label for="file-upload" class="btn btn-outline-secondary me-2">📎</label>
+    <%= f.submit "送信", class: "btn btn-primary" %>
+  <% end %>
+</div>

@@ -60,7 +60,7 @@
           <%# チャットルーム（承認済みならリンク表示） %>
           <td class="text-center align-middle" id="chat-room-<%= application.id %>">
             <% if application.status == "approved" %>
-              <%= link_to "チャットを開く", "#", class: "btn btn-primary btn-sm chat-room-link" %>
+              <%= link_to "チャットを作成", chats_path(job_post_id: application.job_post.id, worker_id: application.worker.id), method: :post, class: "btn btn-primary btn-sm chat-room-link" %>
             <% else %>
               <span class="text-muted">-</span>
             <% end %>
