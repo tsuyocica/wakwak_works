@@ -1,11 +1,29 @@
 <div class="container mt-5">
   <div class="card shadow-sm p-4">
-    <h2 class="mb-4 text-center">新規登録</h2>
+    <!-- 🔹 変更: 見出しを "ユーザー新規登録" にし、デザインを目立たせる -->
+    <h2 class="mb-4 text-center fw-bold text-uppercase text-secondary" style="font-size: 2rem; letter-spacing: 1px;">
+      ユーザー新規登録
+    </h2>
 
     <!-- エラーメッセージの表示 -->
     <%= render "shared/error_messages", object: resource %>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { novalidate: true }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { novalidate: true, multipart: true, data: { controller: "avatar-preview" } }) do |f| %>
+
+      <!-- ✅ アバター画像のアップロード -->
+      <div class="text-center mb-4">
+        <label for="avatar-upload" class="d-block fw-bold">プロフィール画像（任意）</label>
+        <img data-avatar-preview-target="preview"
+             src="<%= asset_path('default_avatar.png') %>"
+             alt="プレビュー"
+             class="rounded-circle border"
+             style="width: 120px; height: 120px; object-fit: cover;">
+        <div class="mt-2">
+          <label for="avatar-upload" class="btn btn-outline-secondary btn-sm">画像を選択</label>
+          <%= f.file_field :avatar, class: "form-control d-none", accept: "image/*", id: "avatar-upload", data: { action: "change->avatar-preview#update" } %>
+        </div>
+      </div>
+
       <div class="row">
         <!-- 左側のカラム -->
         <div class="col-md-6">
@@ -30,14 +48,14 @@
           </div>
 
           <div class="mb-3">
-            <%= f.label :role, "役割", class: "form-label fw-bold" %><br>
+            <%= f.label :role, "ポジション", class: "form-label fw-bold" %><br>
             <div class="form-check form-check-inline">
-              <%= f.radio_button :role, "施工管理者", id: "role_manager", class: "form-check-input" %>
-              <%= f.label :role_manager, "施工管理者", class: "form-check-label" %>
+              <%= f.radio_button :role, "施工管理者", class: "form-check-input", id: "role_manager" %>
+              <%= f.label "role_manager", "施工管理者", class: "form-check-label" %>
             </div>
             <div class="form-check form-check-inline">
-              <%= f.radio_button :role, "作業員", id: "role_worker", class: "form-check-input" %>
-              <%= f.label :role_worker, "作業員", class: "form-check-label" %>
+              <%= f.radio_button :role, "作業員", class: "form-check-input", id: "role_worker" %>
+              <%= f.label "role_worker", "作業員", class: "form-check-label" %>
             </div>
           </div>
         </div>
