@@ -1,10 +1,22 @@
 <div class="card mb-4">
-  <div class="card-header">プロフィール</div>
-  <div class="card-body">
-    <p><strong>氏名:</strong> <%= user.full_name %> (<%= user.furigana %>)</p>
-    <p><strong>生年月日:</strong> <%= user.birth_date.strftime("%Y年%m月%d日") %></p>
+  <div class="card-header text-center">プロフィール</div>
+  <div class="card-body text-center">
+    <!-- アバター画像 -->
+    <div class="mb-3">
+      <% if user.avatar.attached? %>
+        <%= image_tag user.avatar.variant(resize: "120x120").processed, class: "rounded-circle border", style: "width: 120px; height: 120px; object-fit: cover;" %>
+      <% else %>
+        <%= image_tag "default_avatar.png", class: "rounded-circle border", style: "width: 120px; height: 120px; object-fit: cover;" %>
+      <% end %>
+    </div>
+
+    <h5 class="fw-bold"><%= user.full_name %> (<%= user.furigana %>)</h5>
     <p><strong>経験:</strong> <%= user.experience.presence || "未登録" %></p>
     <p><strong>資格:</strong> <%= user.qualification.presence || "未登録" %></p>
-    <%= link_to "プロフィールを編集", edit_user_registration_path, class: "btn btn-warning btn-sm" %>
+
+    <!-- 編集ボタン（現在のユーザーのみ表示） -->
+    <% if user == current_user %>
+      <%= link_to "プロフィールを編集", edit_user_registration_path, class: "btn btn-warning btn-sm" %>
+    <% end %>
   </div>
 </div>
