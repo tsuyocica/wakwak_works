@@ -1,6 +1,52 @@
 @import "bootstrap";
 @import "reset";
 
+/* 全体のフォントを「M PLUS Rounded 1c」に統一 */
+body {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 400; /* 通常の太さ */
+  color: #333; /* 文字色を少し落ち着かせる */
+}
+
+/* 見出しを少し強調 */
+h1, h2, h3, h4, h5 {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 700; /* 太めで見やすく */
+  color: #2C3E50; /* 落ち着いた青みのある色 */
+}
+
+/* ボタン・ナビゲーション用 */
+.navbar, .btn {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 500;
+}
+
+/* フォームの入力欄 */
+input, textarea {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 400;
+}
+
+/* アプリタイトルのスタイル（Bootstrapで補完） */
+.navbar-brand {
+  font-size: 2.5rem;
+  font-family: 'Poppins', sans-serif;
+  color: #2C3E50;
+  letter-spacing: 1px; /* 文字の間隔 */
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    color: #3498db; /* ホバー時の色 */
+    text-decoration: none;
+    transform: scale(1.05); /* 少し拡大 */
+  }
+
+  &:active {
+    transform: scale(0.95); /* クリック時に押し込まれる */
+  }
+}
+
 /* メッセージリストのスタイル（Bootstrapで補完） */
 .messages-list {
   max-height: calc(100vh - 300px); /* 画面全体の高さからヘッダー＆フッター分を引く */
