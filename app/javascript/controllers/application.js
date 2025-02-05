@@ -1,9 +1,12 @@
-import { Application } from "@hotwired/stimulus"
+import { Application } from "@hotwired/stimulus";
 
-const application = Application.start()
+// Stimulusの初期化
+const application = Application.start();
 
-// Configure Stimulus development experience
-application.debug = false
-window.Stimulus   = application
+// Stimulus をデバッグモード OFF（必要なら true に変更）
+application.debug = false;
 
-export { application }
+// グローバル変数として Stimulus を利用可能にする（デバッグ用）
+window.Stimulus = application;
+
+export { application };
