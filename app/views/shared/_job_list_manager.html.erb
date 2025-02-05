@@ -55,12 +55,13 @@
 
           <%# チャット一覧 %>
           <td>
-            <% if job.job_applications.any? %>
-              <%= link_to "チャット一覧", "#", class: "btn btn-primary btn-sm disabled" %> <%# chats_path(job_id: job.id) に後で変更 %>
-            <% else %>
-              <span class="text-muted">なし</span>
-            <% end %>
-          </td>
+            <td>
+              <% if job.job_applications.any? %>
+                <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
+              <% else %>
+                <span class="text-muted">なし</span>
+              <% end %>
+            </td>
 
           <%# 詳細 %>
           <td>
