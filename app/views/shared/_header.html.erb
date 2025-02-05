@@ -1,8 +1,8 @@
 <header class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
   <div class="container d-flex align-items-center">
     <!-- アプリ名 -->
-    <h1 class="navbar-brand mb-0 fw-bold" style="font-size: 2.5rem; font-family: 'Poppins', sans-serif; color: #2C3E50; letter-spacing: 1px;">
-      WakwakWorks
+    <h1 class="navbar-brand mb-0 fw-bold">
+      <%= link_to "WakuwakuWorks", job_posts_path, class: "navbar-brand text-decoration-none px-2" %>
     </h1>
 
     <div class="ms-auto d-flex align-items-center">
@@ -10,13 +10,16 @@
         <!-- ユーザー名 -->
         <span class="me-3 fw-bold text-dark"><%= current_user.username %> さん</span>
 
-        <!-- 役割切り替えボタン -->
-        <div class="btn-group me-3">
-          <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
-              class: "btn #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'}" %>
-          <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
-              class: "btn #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'}" %>
-        </div>
+    <!-- 役割切り替えボタン -->
+    <div class="btn-group me-3">
+      <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
+          class: "btn #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'}",
+          disabled: current_user.role == '施工管理者' %>
+
+      <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
+          class: "btn #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'}",
+          disabled: current_user.role == '作業員' %>
+    </div>
 
         <!-- マイページボタン -->
         <%= link_to "マイページ", user_path(current_user), class: "btn btn-outline-primary me-3" %>
