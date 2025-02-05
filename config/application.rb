@@ -21,5 +21,8 @@ module WakwakWorks
 
     # DBの時間も日本時間に設定
     config.active_record.default_timezone = :local
+
+    # config/application.rb
+    config.active_storage.variant_processor = :mini_magick
   end
 end
