@@ -17,21 +17,17 @@
         <tr>
           <%# 作業場所 %>
           <td><%= job.work_location %></td>
-
           <%# 作業内容（文字制限 + 省略）%>
           <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= job.work_description %>">
             <%= truncate(job.work_description, length: 60, omission: "…") %>
           </td>
-
           <%# 作業期間（開始日 & 終了日を2段に）%>
           <td>
             <span><%= job.work_start_date.strftime('%Y/%m/%d') %></span><br>
             〜 <span><%= job.work_end_date.strftime('%Y/%m/%d') %></span>
           </td>
-
           <%# 報酬（フォーマット統一）%>
           <td><%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></td>
-
           <%# 募集状況 %>
           <td>
             <% if job.work_status == "recruiting" %>
@@ -40,7 +36,6 @@
               <span class="badge bg-secondary">受付終了</span>
             <% end %>
           </td>
-
           <%# 応募の有無（件数 + 応募者一覧リンク）%>
           <td>
             <% if job.job_applications.any? %>
@@ -55,13 +50,12 @@
 
           <%# チャット一覧 %>
           <td>
-            <td>
-              <% if job.job_applications.any? %>
-                <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
-              <% else %>
-                <span class="text-muted">なし</span>
-              <% end %>
-            </td>
+            <% if job.job_applications.any? %>
+              <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
+            <% else %>
+              <span class="text-muted">なし</span>
+            <% end %>
+          </td>
 
           <%# 詳細 %>
           <td>

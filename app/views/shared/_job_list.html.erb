@@ -5,10 +5,8 @@
         <th>投稿者名</th>
         <th>作業場所</th>
         <th>作業内容</th>
-        <th>開始日</th>
-        <th>終了日</th>
+        <th>作業期間</th>
         <th>報酬</th>
-        <th>募集状況</th>
         <th>応募状況</th>
         <th>チャット</th>
         <th>詳細</th>
@@ -17,31 +15,48 @@
     <tbody>
       <% job_lists.each do |job| %>
         <tr>
+          <%# 投稿者名 %>
           <td><%= job.user.username %></td>
+          <%# 作業場所 %>
           <td><%= job.work_location %></td>
-          <td><%= job.work_description %></td>
-          <td><%= job.work_start_date %></td>
-          <td><%= job.work_end_date %></td>
-          <td><%= number_to_currency(job.work_payment, unit: "¥", precision: 0) %></td>
+          <%# 作業内容（文字制限 + 省略） %>
+          <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= job.work_description %>">
+            <%= truncate(job.work_description, length: 60, omission: "…") %>
+          </td>
+          <%# 作業期間（開始日 & 終了日を2段に）%>
           <td>
-            <% if job.work_status == "recruiting" %>
-              <span class="badge bg-success">募集中</span>
-            <% else %>
-              <span class="badge bg-secondary">受付終了</span>
-            <% end %>
+            <span><%= job.work_start_date.strftime('%Y/%m/%d') %></span><br>
+            〜 <span><%= job.work_end_date.strftime('%Y/%m/%d') %></span>
+          </td>
+          <%# 報酬（フォーマット統一）%>
+          <td><%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></td>
+          <%# 応募状況%>
+          <td>
+            <% application = job.job_applications.find_by(worker: current_user) %>
+
+            <% if application %>
+              <% status_class = case application.status
+                when "pending" then "bg-warning text-dark"  # 未承認（黄色）
+                when "approved" then "bg-success text-white" # 承認済み（緑）
+                when "rejected" then "bg-danger text-white"  # 却下（赤）
+                else "bg-secondary text-white"              # 不明（灰色）
+                end
+              %>
+
+              <span class="badge <%= status_class %>"><%= I18n.t("job_application.status.#{application.status}") %></span>
           </td>
           <td>
-            <% if job.job_applications.exists?(worker: current_user) %>
-              <span class="badge bg-info">応募済み</span>
+               <!-- ✅ 承認済みの場合のみ "チャットを開く" ボタンを表示 -->
+              <% if application.status == "approved" %>
+                <% chat = Chat.find_by(job_post_id: application.job_post_id, owner_id: job.user.id, worker_id: application.worker_id) %>
+                <% if chat.present? %>
+                  <div class="mt-2">
+                    <%= link_to "チャットを開く", chat_path(chat), class: "btn btn-primary btn-sm" %>
+                  </div>
+                <% end %>
+              <% end %>
             <% else %>
               <span class="badge bg-secondary">未応募</span>
-            <% end %>
-          </td>
-          <td>
-            <% if job.job_applications.exists?(worker: current_user) %>
-              <%= link_to "チャットを開く", "#", class: "btn btn-primary btn-sm" %> <%#chat_path(job.chat)%>
-            <% else %>
-              <span class="text-muted">未応募</span>
             <% end %>
           </td>
           <td>
