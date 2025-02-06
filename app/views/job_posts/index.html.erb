@@ -49,96 +49,96 @@
     <% end %>
   </div>
 
-  <!-- ✅ 表示切り替えボタン -->
-  <div class="d-flex justify-content-end mb-3" data-controller="toggle-view">
-    <button data-action="click->toggle-view#switchView" data-toggle-view-target="toggleButton" class="btn btn-outline-primary">
-      テーブル形式で表示
-    </button>
-  </div>
+<!-- ✅ 表示切り替えボタン -->
+<div class="d-flex justify-content-end mb-3" data-controller="toggle-view">
+  <button data-action="click->toggle-view#switchView" data-toggle-view-target="toggleButton" class="btn btn-outline-primary">
+    テーブル形式で表示
+  </button>
+</div>
 
-  <!-- ✅ 表示切り替え対象のコンテナ -->
-  <div data-toggle-view-target="container">
-    <!-- ✅ カード形式の表示（デフォルト） -->
-    <div id="card-view" class="container card-view">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-        <% @job_posts.each do |job| %>
-          <div class="col">
-            <%= link_to job_post_path(job), class: "text-decoration-none" do %> <!-- ✅ カード全体をクリック可能 -->
-              <div class="card shadow-sm h-100 position-relative">
-                <!-- ✅ 受付終了バンド -->
-                <% if job.work_status == "closed" %>
-                  <div class="position-absolute top-50 start-50 translate-middle bg-dark text-white py-2 px-4 fw-bold" style="opacity: 0.8; font-size: 2rem;">
-                    受付終了
-                  </div>
-                <% end %>
+<!-- ✅ 表示切り替え対象のコンテナ -->
+<div>
+  <!-- ✅ カード形式の表示（デフォルト） -->
+  <div id="card-view" data-toggle-view-target="cardView" class="container card-view">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <% @job_posts.each do |job| %>
+        <div class="col">
+          <%= link_to job_post_path(job), class: "text-decoration-none" do %>
+            <div class="card shadow-sm h-100 position-relative">
+              <!-- ✅ 受付終了バンド -->
+              <% if job.work_status == "closed" %>
+                <div class="position-absolute top-50 start-50 translate-middle bg-dark text-white py-2 px-4 fw-bold" style="opacity: 0.8; font-size: 2rem;">
+                  受付終了
+                </div>
+              <% end %>
 
-                <!-- ✅ 画像のトリミング -->
-                <% if job.image.attached? %>
-                  <%= image_tag job.image.variant(resize_to_fill: [400, 250]), class: "card-img-top img-fluid", alt: "工事現場画像", style: "height: 250px; object-fit: cover;" %>
-                <% else %>
-                  <%= image_tag "no_image.png", class: "card-img-top img-fluid", alt: "画像なし", style: "height: 250px; object-fit: cover;" %>
-                <% end %>
+              <!-- ✅ 画像のトリミング -->
+              <% if job.image.attached? %>
+                <%= image_tag job.image.variant(resize_to_fill: [400, 250]), class: "card-img-top img-fluid", alt: "工事現場画像", style: "height: 250px; object-fit: cover;" %>
+              <% else %>
+                <%= image_tag "no_image.png", class: "card-img-top img-fluid", alt: "画像なし", style: "height: 250px; object-fit: cover;" %>
+              <% end %>
 
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title text-truncate text-dark" style="max-height: 3em;">
-                    <%= truncate(job.work_title, length: 40, omission: "…") %>
-                  </h5>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-truncate text-dark" style="max-height: 3em;">
+                  <%= truncate(job.work_title, length: 40, omission: "…") %>
+                </h5>
 
-                  <div class="mt-auto text-secondary">
-                    <p class="mb-1"><i class="bi bi-geo-alt"></i> <%= job.work_location %></p>
-                    <p class="mb-1"><i class="bi bi-calendar"></i> <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></p>
-                    <p class="mb-1 text-danger"><i class="bi bi-cash"></i> ¥ <%= number_to_currency(job.work_payment, unit: "", precision: 0) %></p>
-                    <p class="mb-1">
-                      <% if job.work_status == "recruiting" %>
-                        <span class="badge bg-success">募集中</span>
-                      <% else %>
-                        <br>
-                      <% end %>
-                    </p>
-                  </div>
+                <div class="mt-auto text-secondary">
+                  <p class="mb-1"><i class="bi bi-geo-alt"></i> <%= job.work_location %></p>
+                  <p class="mb-1"><i class="bi bi-calendar"></i> <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></p>
+                  <p class="mb-1 text-danger"><i class="bi bi-cash"></i> ¥ <%= number_to_currency(job.work_payment, unit: "", precision: 0) %></p>
+                  <p class="mb-1">
+                    <% if job.work_status == "recruiting" %>
+                      <span class="badge bg-success">募集中</span>
+                    <% else %>
+                      <br>
+                    <% end %>
+                  </p>
                 </div>
               </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <!-- ✅ テーブル形式の表示（デフォルトは非表示） -->
-    <div id="table-view" hidden>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>場所</th>
-            <th>作業件名</th>
-            <th>作業期間</th>
-            <th>報酬</th>
-            <th>募集状況</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @job_posts.each do |job| %>
-            <tr onclick="window.location.href='<%= job_post_path(job) %>'"
-                style="cursor: pointer;"
-                class="<%= job.work_status == 'closed' ? 'text-muted' : 'text-dark' %>">
-              <td><%= job.work_location %></td>
-              <td><%= truncate(job.work_title, length: 40, omission: '…') %></td>
-              <td>
-                <%= job.work_start_date.strftime('%Y/%m/%d') %><br>
-                 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %>
-              </td>
-              <td><%= number_to_currency(job.work_payment, unit: '¥', precision: 0) %></td>
-              <td>
-                <% if job.work_status == "recruiting" %>
-                  <span class="badge bg-success">募集中</span>
-                <% else %>
-                  <span class="badge bg-secondary">受付終了</span>
-                <% end %>
-              </td>
-            </tr>
+            </div>
           <% end %>
-        </tbody>
-      </table>
+        </div>
+      <% end %>
     </div>
   </div>
+
+  <!-- ✅ テーブル形式の表示（デフォルトは非表示） -->
+  <div id="table-view" data-toggle-view-target="tableView" hidden>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>場所</th>
+          <th>作業件名</th>
+          <th>作業期間</th>
+          <th>報酬</th>
+          <th>募集状況</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @job_posts.each do |job| %>
+          <tr onclick="window.location.href='<%= job_post_path(job) %>'"
+              style="cursor: pointer;"
+              class="<%= job.work_status == 'closed' ? 'text-muted' : 'text-dark' %>">
+            <td><%= job.work_location %></td>
+            <td><%= truncate(job.work_title, length: 40, omission: '…') %></td>
+            <td>
+              <%= job.work_start_date.strftime('%Y/%m/%d') %><br>
+               〜 <%= job.work_end_date.strftime('%Y/%m/%d') %>
+            </td>
+            <td><%= number_to_currency(job.work_payment, unit: '¥', precision: 0) %></td>
+            <td>
+              <% if job.work_status == "recruiting" %>
+                <span class="badge bg-success">募集中</span>
+              <% else %>
+                <span class="badge bg-secondary">受付終了</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
 </div>
