@@ -64,7 +64,9 @@ export default class extends Controller {
                     document.querySelector('meta[name="csrf-token"]').content
                   }">
                   <input type="hidden" name="job_post_id" value="${jobPostId}">
-                  <input type="hidden" name="worker_id" value="${applicationId}">
+                  <input type="hidden" name="worker_id" value="${
+                    data.worker_id
+                  }">  <!-- ✅ 修正 -->
                   <button type="submit" class="btn btn-primary btn-sm">チャットを作成</button>
                 </form>
               `;

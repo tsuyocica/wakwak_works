@@ -39,7 +39,8 @@ class JobApplicationsController < ApplicationController
   def update_status
     if params[:status].present? && %w[pending approved rejected].include?(params[:status])
       if @job_application.update(status: params[:status])
-        render json: { success: true, status: @job_application.status }
+        # ✅ worker_id を追加
+        render json: { success: true, status: @job_application.status, worker_id: @job_application.worker_id }
       else
         render json: { success: false, errors: @job_application.errors.full_messages }, status: :unprocessable_entity
       end
