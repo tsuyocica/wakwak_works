@@ -4,7 +4,7 @@ class JobPost < ApplicationRecord
   has_many :job_applications, dependent: :destroy  # 作業員の応募
   has_many :chats, dependent: :destroy  # 案件ごとのチャット
 
-  has_one_attached :image  # ActiveStorage でアバター画像を管理
+  has_one_attached :image  # ActiveStorage でメイン画像を管理
 
   # バリデーション
   validates :work_title, presence: true

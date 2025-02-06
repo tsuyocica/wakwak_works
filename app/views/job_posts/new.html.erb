@@ -10,6 +10,11 @@
         <!-- 左カラム -->
         <div class="col-md-6">
           <div class="mb-3">
+            <%= f.label :image, "工事現場の画像", class: "form-label" %>
+            <%= f.file_field :image, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
             <%= f.label :work_title, "案件名", class: "form-label fw-bold" %>
             <%= f.text_field :work_title, class: "form-control", required: true %>
           </div>
