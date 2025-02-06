@@ -50,7 +50,7 @@ class UsersController < ApplicationController
 
   # 許可するパラメータ
   def user_params
-    params.require(:user).permit(:username, :full_name, :furigana, :birth_date, :role, :experience, :qualification, :email, :password, :password_confirmation)
+    params.require(:user).permit(:avatar, :username, :full_name, :furigana, :birth_date, :role, :experience, :qualification, :email, :password, :password_confirmation)
   end
 
   # ユーザー権限を確認（他人の編集・削除を防ぐ）

@@ -6,3 +6,7 @@ eagerLoadControllersFrom("controllers", application);
 // 追加
 import JobApplicationsController from "./job_applications_controller";
 application.register("job-applications", JobApplicationsController);
+
+// job_post/indexビューの表示切り替え
+import ToggleViewController from "./toggle_view_controller";
+application.register("toggle-view", ToggleViewController);

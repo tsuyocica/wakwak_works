@@ -1,5 +1,17 @@
 @import "bootstrap";
 @import "reset";
+/************************ 全体 ************************/
+/* flashメッセージをポップアップ風のデザインに調整 */
+.flash-container {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.alert {
+  opacity: 0.95;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
 /* 全体のフォントを「M PLUS Rounded 1c」に統一 */
 body {
@@ -27,6 +39,7 @@ input, textarea {
   font-weight: 400;
 }
 
+/************************ ヘッダー部 ************************/
 /* アプリタイトルのスタイル（Bootstrapで補完） */
 .navbar-brand {
   font-size: 2.5rem;
@@ -47,20 +60,66 @@ input, textarea {
   }
 }
 
+/************************ トップページ ************************/
+// ✅ ユーザー名のデザイン調整
+.user-link {
+  font-size: 1.5rem; // フォントサイズを1.5倍
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.user-link:hover {
+  font-size: 1.8rem; // ホバー時にさらに大きく
+  color: #007bff; // アプリ名と同じ色に変更（適宜変更可能）
+}
+
+// ✅ ヒーローセクションのデザイン調整
+.hero-container {
+  position: relative;
+  width: 100%;
+  max-width: 1270px; /* Bootstrapのcontainer幅に合わせる */
+  height: 400px; /* キャッチコピーの上下100px */
+  margin: 0 auto; /* 中央配置 */
+}
+
+// ✅ ムービーのスタイル
+.hero-video {
+  width: 100%;
+  height: 400px;
+  object-fit: cover; /* 🎯 横幅いっぱいを維持しつつ切り抜き */
+}
+
+// ✅ キャッチコピーのデザイン
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ef8d15;
+  text-align: center;
+  display: block;
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.hero-text h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 8px rgba(234, 4, 4, 0.6);
+}
+
+.hero-text p {
+  font-size: 1rem;
+  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/************************ チャットページ ************************/
 /* メッセージリストのスタイル（Bootstrapで補完） */
 .messages-list {
   max-height: calc(100vh - 300px); /* 画面全体の高さからヘッダー＆フッター分を引く */
   overflow-y: auto; /* スクロール可能 */
-}
-
-/* flashメッセージをポップアップ風のデザインに調整 */
-.flash-container {
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-}
-
-.alert {
-  opacity: 0.95;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

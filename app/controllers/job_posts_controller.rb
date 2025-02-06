@@ -3,7 +3,8 @@ class JobPostsController < ApplicationController
   before_action :set_job_post, only: [:show, :edit, :update, :destroy]
 
   def index
-    @job_posts = JobPost.all.order(created_at: :desc) # 募集中の案件を表示
+    @q = JobPost.ransack(params[:q]) # 🔍 Ransackの検索オブジェクトを作成
+    @job_posts = @q.result(distinct: true).includes(:user).order(created_at: :desc) # 🔹 検索結果を取得
   end
 
   def show
@@ -24,7 +25,6 @@ class JobPostsController < ApplicationController
   end
 
   def edit
-    # @job_post が nil の場合のエラーハンドリング（念のため）
     unless @job_post
       redirect_to job_posts_path, alert: "案件が見つかりませんでした。"
     end
@@ -60,6 +60,6 @@ class JobPostsController < ApplicationController
   end
 
   def job_post_params
-    params.require(:job_post).permit(:work_title, :work_description, :work_capacity, :work_start_date, :work_end_date, :work_payment, :work_location, :work_status)
+    params.require(:job_post).permit(:work_title, :work_description, :work_capacity, :work_start_date, :work_end_date, :work_payment, :work_location, :work_status, :image)
   end
 end
