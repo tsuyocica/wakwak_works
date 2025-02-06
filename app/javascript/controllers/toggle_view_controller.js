@@ -29,11 +29,4 @@ export default class extends Controller {
       this.toggleButtonTarget.textContent = "テーブル形式で表示";
     }
   }
-
-  goToDetail(event) {
-    const url = event.currentTarget.dataset.url;
-    if (url) {
-      window.location.href = url;
-    }
-  }
 }
