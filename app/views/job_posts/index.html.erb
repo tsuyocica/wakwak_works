@@ -67,7 +67,7 @@
               <div class="card shadow-sm h-100 position-relative">
                 <!-- ✅ 受付終了バンド -->
                 <% if job.work_status == "closed" %>
-                  <div class="position-absolute top-50 start-50 translate-middle bg-dark text-white py-2 px-4 fw-bold" style="opacity: 0.8;">
+                  <div class="position-absolute top-50 start-50 translate-middle bg-dark text-white py-2 px-4 fw-bold" style="opacity: 0.8; font-size: 2rem;">
                     受付終了
                   </div>
                 <% end %>
@@ -87,12 +87,12 @@
                   <div class="mt-auto text-secondary">
                     <p class="mb-1"><i class="bi bi-geo-alt"></i> <%= job.work_location %></p>
                     <p class="mb-1"><i class="bi bi-calendar"></i> <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></p>
-                    <p class="mb-1 text-danger"><i class="bi bi-cash"></i> <%= number_to_currency(job.work_payment, unit: "¥", precision: 0) %></p>
+                    <p class="mb-1 text-danger"><i class="bi bi-cash"></i> ¥ <%= number_to_currency(job.work_payment, unit: "", precision: 0) %></p>
                     <p class="mb-1">
                       <% if job.work_status == "recruiting" %>
                         <span class="badge bg-success">募集中</span>
                       <% else %>
-                        <span class="badge bg-secondary">受付終了</span>
+                        <br>
                       <% end %>
                     </p>
                   </div>
@@ -110,7 +110,7 @@
         <thead>
           <tr>
             <th>場所</th>
-            <th>作業内容</th>
+            <th>作業件名</th>
             <th>作業期間</th>
             <th>報酬</th>
             <th>募集状況</th>
@@ -118,11 +118,16 @@
         </thead>
         <tbody>
           <% @job_posts.each do |job| %>
-            <tr data-action="click->toggle-view#goToDetail" data-url="<%= job_post_path(job) %>" class="<%= job.work_status == 'closed' ? 'text-muted' : 'text-dark' %>">
+            <tr onclick="window.location.href='<%= job_post_path(job) %>'"
+                style="cursor: pointer;"
+                class="<%= job.work_status == 'closed' ? 'text-muted' : 'text-dark' %>">
               <td><%= job.work_location %></td>
-              <td><%= truncate(job.work_title, length: 40, omission: "…") %></td>
-              <td><%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></td>
-              <td><%= number_to_currency(job.work_payment, unit: "¥", precision: 0) %></td>
+              <td><%= truncate(job.work_title, length: 40, omission: '…') %></td>
+              <td>
+                <%= job.work_start_date.strftime('%Y/%m/%d') %><br>
+                 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %>
+              </td>
+              <td><%= number_to_currency(job.work_payment, unit: '¥', precision: 0) %></td>
               <td>
                 <% if job.work_status == "recruiting" %>
                   <span class="badge bg-success">募集中</span>
