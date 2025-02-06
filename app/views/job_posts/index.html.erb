@@ -1,34 +1,51 @@
-<h1>作業案件一覧</h1>
+<div class="container">
+  <!-- ✅ ヒーローセクション -->
+  <div class="hero-container">
+    <!-- 🎥 ヒーロー動画 -->
+    <!-- 🔥 キャッチコピー -->
+    <div class="hero-text">
+      <h2 class="fw-bold">あなたのスキルが活かせる現場がここに！</h2>
+      <p class="text-warning">施工管理者と作業員をつなぐ、新しい働き方を提供します。</p>
+    </div>
+    <video class="hero-video" autoplay loop muted preload>
+      <source src="<%= video_path('hero2-movie.mp4') %>" type="video/mp4">
+      お使いのブラウザでは動画を再生できません。
+    </video>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>場所</th>
-      <th>作業内容</th>
-      <th>作業開始日</th>
-      <th>作業終了日</th>
-      <th>報酬</th>
-      <th>募集状況</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @job_posts.each do |job| %>
+  </div>
+
+  <h1>作業案件一覧</h1>
+
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= job.work_location %></td>
-        <td><%= job.work_title %></td>
-        <td><%= job.work_start_date %></td>
-        <td><%= job.work_end_date %></td>
-        <td><%= number_to_currency(job.work_payment, unit: "¥", precision: 0) %></td>
-        <td>
-          <% if job.work_status == "recruiting" %>
-            <span class="badge bg-success">募集中</span>
-          <% else %>
-            <span class="badge bg-secondary">受付終了</span>
-          <% end %>
-        </td>
-        <td><%= link_to "詳細", job_post_path(job), class: "btn btn-info btn-sm" %></td>
+        <th>場所</th>
+        <th>作業内容</th>
+        <th>作業開始日</th>
+        <th>作業終了日</th>
+        <th>報酬</th>
+        <th>募集状況</th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @job_posts.each do |job| %>
+        <tr>
+          <td><%= job.work_location %></td>
+          <td><%= job.work_title %></td>
+          <td><%= job.work_start_date %></td>
+          <td><%= job.work_end_date %></td>
+          <td><%= number_to_currency(job.work_payment, unit: "¥", precision: 0) %></td>
+          <td>
+            <% if job.work_status == "recruiting" %>
+              <span class="badge bg-success">募集中</span>
+            <% else %>
+              <span class="badge bg-secondary">受付終了</span>
+            <% end %>
+          </td>
+          <td><%= link_to "詳細", job_post_path(job), class: "btn btn-info btn-sm" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
