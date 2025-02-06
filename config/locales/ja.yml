@@ -1,0 +1,6 @@
+ja:
+  job_application:
+    status:
+      pending: "未承認"
+      approved: "承認済み"
+      rejected: "却下"
