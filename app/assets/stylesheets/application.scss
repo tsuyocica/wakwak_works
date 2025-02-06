@@ -60,7 +60,7 @@ input, textarea {
   }
 }
 
-/************************ チャットページ ************************/
+/************************ トップページ ************************/
 // ✅ ユーザー名のデザイン調整
 .user-link {
   font-size: 1.5rem; // フォントサイズを1.5倍
@@ -107,13 +107,13 @@ input, textarea {
 }
 
 .hero-text h2 {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: bold;
   text-shadow: 2px 2px 8px rgba(234, 4, 4, 0.6);
 }
 
 .hero-text p {
-  font-size: 2rem;
+  font-size: 1rem;
   text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
 }
 
