@@ -7,22 +7,27 @@
 
     <div class="ms-auto d-flex align-items-center">
       <% if user_signed_in? %>
-        <!-- ユーザー名 -->
-        <span class="me-3 fw-bold text-dark"><%= current_user.username %> さん</span>
+        <!-- ✅ ユーザー名 & アバター -->
+        <div class="d-flex align-items-center me-3">
+          <% if current_user.avatar.attached? %>
+            <%= image_tag current_user.avatar.variant(resize: "40x40"), class: "rounded-circle me-2", alt: "Avatar" %>
+          <% else %>
+            <i class="bi bi-person-circle me-2" style="font-size: 40px;"></i>
+          <% end %>
 
-    <!-- 役割切り替えボタン -->
-    <div class="btn-group me-3">
-      <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
-          class: "btn #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'}",
-          disabled: current_user.role == '施工管理者' %>
+          <%= link_to "#{current_user.username} さん", user_path(current_user), class: "user-link" %>
+        </div>
 
-      <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
-          class: "btn #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'}",
-          disabled: current_user.role == '作業員' %>
-    </div>
+        <!-- 役割切り替えボタン -->
+        <div class="btn-group me-3">
+          <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
+              class: "btn #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'}",
+              disabled: current_user.role == '施工管理者' %>
 
-        <!-- マイページボタン -->
-        <%= link_to "マイページ", user_path(current_user), class: "btn btn-outline-primary me-3" %>
+          <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
+              class: "btn #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'}",
+              disabled: current_user.role == '作業員' %>
+        </div>
 
         <!-- ログアウトボタン -->
         <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
