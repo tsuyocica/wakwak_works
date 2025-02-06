@@ -12,19 +12,36 @@
         <% end %>
 
         <% if partner.present? %>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <%= link_to chat_path(chat), class: "text-dark d-flex align-items-center w-100 text-decoration-none" do %>
-              <!-- ✅ アバター画像表示 -->
-              <div class="me-2">
-                <% if partner.avatar.attached? %>
-                  <%= image_tag partner.avatar.variant(resize: "40x40"), class: "rounded-circle", alt: "Avatar", width: 40, height: 40 %>
-                <% else %>
-                  <i class="bi bi-person-circle" style="font-size: 40px;"></i> <!-- デフォルトアイコン -->
-                <% end %>
+          <li class="list-group-item">
+            <%= link_to chat_path(chat), class: "text-dark d-block text-decoration-none" do %>
+
+              <!-- ✅ 作業員の場合のみ作業件名を表示 -->
+              <% unless current_user.role.include?("施工管理者") %>
+                <div class="fw-bold text-truncate" style="max-width: 100%;">
+                  <%= chat.job_post.work_title %>
+                </div>
+              <% end %>
+
+              <!-- ✅ アバター・投稿者名・時間 -->
+              <div class="d-flex align-items-center mt-1">
+                <!-- アバター -->
+                <div class="me-2">
+                  <% if partner.avatar.attached? %>
+                    <%= image_tag partner.avatar.variant(resize: "40x40"), class: "rounded-circle", alt: "Avatar", width: 40, height: 40 %>
+                  <% else %>
+                    <i class="bi bi-person-circle" style="font-size: 40px;"></i> <!-- デフォルトアイコン -->
+                  <% end %>
+                </div>
+
+                <!-- 投稿者名 -->
+                <div class="flex-grow-1 text-truncate">
+                  <%= chat_label %>
+                </div>
+
+                <!-- 投稿日時 -->
+                <span class="badge bg-secondary"><%= time_ago_in_words(chat.updated_at) %>前</span>
               </div>
-              <span class="fw-bold"><%= chat_label %></span>
             <% end %>
-            <span class="badge bg-secondary"><%= time_ago_in_words(chat.updated_at) %>前</span>
           </li>
         <% end %>
       <% end %>
