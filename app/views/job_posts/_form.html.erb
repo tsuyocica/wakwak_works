@@ -1,0 +1,89 @@
+<%= form_with(model: @job_post, local: true, html: { novalidate: true }) do |f| %>
+  <div class="row">
+    <!-- 左カラム -->
+    <div class="col-md-6">
+      <!-- メイン画像 -->
+      <div class="mb-3">
+        <%= f.label :main_image, "メイン画像", class: "form-label fw-bold" %>
+        <%= f.file_field :main_image, class: "form-control", accept: "image/*", data: { action: "change->image-preview#displayMainImage" } %>
+        <div id="main-image-preview" class="mt-2"></div>
+      </div>
+
+      <!-- 現場写真（複数枚） -->
+      <div class="mb-3">
+        <%= f.label :sub_images, "現場写真（最大10枚）", class: "form-label fw-bold" %>
+        <%= f.file_field :sub_images, multiple: true, class: "form-control", accept: "image/*", data: { action: "change->image-preview#displaySubImages" } %>
+        <div id="sub-images-preview" class="d-flex flex-wrap mt-2"></div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_title, "案件名", class: "form-label fw-bold" %>
+        <%= f.text_field :work_title, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_description, "仕事内容", class: "form-label fw-bold" %>
+        <%= f.text_area :work_description, class: "form-control", rows: 4, required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_capacity, "募集人数", class: "form-label fw-bold" %>
+        <%= f.number_field :work_capacity, class: "form-control", required: true, min: 1 %>
+      </div>
+    </div>
+
+    <!-- 右カラム -->
+    <div class="col-md-6">
+      <div class="mb-3">
+        <%= f.label :work_payment, "報酬 (円)", class: "form-label fw-bold" %>
+        <%= f.number_field :work_payment, class: "form-control", required: true, min: 0 %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_start_date, "作業開始日", class: "form-label fw-bold" %>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+          <%= f.date_field :work_start_date, class: "form-control", required: true %>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_end_date, "作業終了日", class: "form-label fw-bold" %>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+          <%= f.date_field :work_end_date, class: "form-control", required: true %>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_location, "作業場所", class: "form-label fw-bold" %>
+        <%= f.text_field :work_location, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_status, "募集状況", class: "form-label fw-bold" %><br>
+        <div class="form-check form-check-inline">
+          <%= f.radio_button :work_status, "recruiting", id: "recruiting", class: "form-check-input" %>
+          <%= f.label :recruiting, "募集中", class: "form-check-label" %>
+        </div>
+        <div class="form-check form-check-inline">
+          <%= f.radio_button :work_status, "closed", id: "closed", class: "form-check-input" %>
+          <%= f.label :closed, "締め切り", class: "form-check-label" %>
+        </div>
+      </div>
+
+      <!-- ファイルアップロード -->
+      <div class="mb-3">
+        <%= f.label :attachments, "添付ファイル（PDF, Excel, Word, 最大5部）", class: "form-label fw-bold" %>
+        <%= f.file_field :attachments, multiple: true, class: "form-control", accept: ".pdf,.xlsx,.xls,.doc,.docx", data: { action: "change->file-preview#displayFiles" } %>
+        <ul id="file-preview-list" class="mt-2 list-unstyled"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ボタン -->
+  <div class="d-flex justify-content-center mt-4">
+    <%= f.submit "登録", class: "btn btn-primary px-4 py-2 me-3" %>
+    <%= link_to "戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2" %>
+  </div>
+<% end %>
