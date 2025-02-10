@@ -76,7 +76,7 @@
               <% if job.main_image.attached? %>
                 <%= image_tag job.main_image.variant(resize_to_fill: [400, 250]), class: "card-img-top img-fluid", alt: "工事現場画像", style: "height: 250px; object-fit: cover;" %>
               <% else %>
-                <%= image_tag "no_image.png", class: "card-img-top img-fluid", alt: "画像なし", style: "height: 250px; object-fit: cover;" %>
+                <%= image_tag "noimage.png", class: "card-img-top img-fluid", alt: "画像なし", style: "height: 250px; object-fit: cover;" %>
               <% end %>
 
               <div class="card-body d-flex flex-column">

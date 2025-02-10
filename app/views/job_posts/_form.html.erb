@@ -1,24 +1,39 @@
 <%= form_with(model: @job_post, local: true, html: { novalidate: true }) do |f| %>
   <div class="row">
-    <!-- 左カラム -->
+    <!-- ✅ 左カラム：メイン画像 -->
     <div class="col-md-6">
-      <!-- メイン画像 -->
-      <div class="mb-3">
+      <!-- ✅ メイン画像 -->
+      <div class="mb-3" data-controller="image-preview">
         <%= f.label :main_image, "メイン画像", class: "form-label fw-bold" %>
-        <%= f.file_field :main_image, class: "form-control", accept: "image/*", data: { action: "change->image-preview#displayMainImage" } %>
-        <div id="main-image-preview" class="mt-2"></div>
-      </div>
+        <%= f.file_field :main_image, class: "form-control d-none", accept: "image/*",
+              data: { action: "change->image-preview#displayMainImage", image_preview_target: "mainImageInput" } %>
 
-      <!-- 現場写真（複数枚） -->
-      <div class="mb-3">
-        <%= f.label :sub_images, "現場写真（最大10枚）", class: "form-label fw-bold" %>
-        <%= f.file_field :sub_images, multiple: true, class: "form-control", accept: "image/*", data: { action: "change->image-preview#displaySubImages" } %>
-        <div id="sub-images-preview" class="d-flex flex-wrap mt-2"></div>
-      </div>
+        <div id="main-image-preview" class="border p-3 d-flex align-items-center justify-content-center position-relative"
+            data-image-preview-target="mainImagePreview"
+            data-action="click->image-preview#triggerMainImageSelection">
 
+          <% if @job_post.persisted? && @job_post.main_image.attached? %>
+            <img src="<%= url_for(@job_post.main_image) %>" class="img-thumbnail w-100 h-100 object-fit-cover">
+          <% else %>
+            <img src="<%= asset_path('noimage.png') %>" class="img-thumbnail w-100 h-100 object-fit-cover">
+          <% end %>
+
+          <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0"
+            data-action="click->image-preview#removeMainImage">×</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ 右カラム：案件情報-->
+    <div class="col-md-6">
       <div class="mb-3">
         <%= f.label :work_title, "案件名", class: "form-label fw-bold" %>
         <%= f.text_field :work_title, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :work_location, "作業場所", class: "form-label fw-bold" %>
+        <%= f.text_field :work_location, class: "form-control", required: true, value: @job_post.work_location %>
       </div>
 
       <div class="mb-3">
@@ -30,58 +45,42 @@
         <%= f.label :work_capacity, "募集人数", class: "form-label fw-bold" %>
         <%= f.number_field :work_capacity, class: "form-control", required: true, min: 1 %>
       </div>
-    </div>
 
-    <!-- 右カラム -->
-    <div class="col-md-6">
       <div class="mb-3">
         <%= f.label :work_payment, "報酬 (円)", class: "form-label fw-bold" %>
-        <%= f.number_field :work_payment, class: "form-control", required: true, min: 0 %>
+        <%= f.number_field :work_payment, class: "form-control", required: true, min: 0, value: (@job_post.work_payment || 0) %>
       </div>
 
       <div class="mb-3">
         <%= f.label :work_start_date, "作業開始日", class: "form-label fw-bold" %>
-        <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-          <%= f.date_field :work_start_date, class: "form-control", required: true %>
-        </div>
+        <%= f.date_field :work_start_date, class: "form-control", required: true %>
       </div>
 
       <div class="mb-3">
         <%= f.label :work_end_date, "作業終了日", class: "form-label fw-bold" %>
-        <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-          <%= f.date_field :work_end_date, class: "form-control", required: true %>
-        </div>
+        <%= f.date_field :work_end_date, class: "form-control", required: true %>
       </div>
 
-      <div class="mb-3">
-        <%= f.label :work_location, "作業場所", class: "form-label fw-bold" %>
-        <%= f.text_field :work_location, class: "form-control", required: true %>
-      </div>
-
-      <div class="mb-3">
-        <%= f.label :work_status, "募集状況", class: "form-label fw-bold" %><br>
-        <div class="form-check form-check-inline">
-          <%= f.radio_button :work_status, "recruiting", id: "recruiting", class: "form-check-input" %>
-          <%= f.label :recruiting, "募集中", class: "form-check-label" %>
+      <!-- ✅ 募集状況（新規登録時は「募集中」に固定 & 非表示、編集時のみ表示） -->
+      <% if @job_post.new_record? %>
+        <%= f.hidden_field :work_status, value: "recruiting" %>
+      <% else %>
+        <div class="mb-3">
+          <%= f.label :work_status, "募集状況", class: "form-label fw-bold" %><br>
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :work_status, "recruiting", id: "recruiting", class: "form-check-input", checked: @job_post.work_status == "recruiting" %>
+            <%= f.label :recruiting, "募集中", class: "form-check-label" %>
+          </div>
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :work_status, "closed", id: "closed", class: "form-check-input", checked: @job_post.work_status == "closed" %>
+            <%= f.label :closed, "締め切り", class: "form-check-label" %>
+          </div>
         </div>
-        <div class="form-check form-check-inline">
-          <%= f.radio_button :work_status, "closed", id: "closed", class: "form-check-input" %>
-          <%= f.label :closed, "締め切り", class: "form-check-label" %>
-        </div>
-      </div>
-
-      <!-- ファイルアップロード -->
-      <div class="mb-3">
-        <%= f.label :attachments, "添付ファイル（PDF, Excel, Word, 最大5部）", class: "form-label fw-bold" %>
-        <%= f.file_field :attachments, multiple: true, class: "form-control", accept: ".pdf,.xlsx,.xls,.doc,.docx", data: { action: "change->file-preview#displayFiles" } %>
-        <ul id="file-preview-list" class="mt-2 list-unstyled"></ul>
-      </div>
+      <% end %>
     </div>
   </div>
 
-  <!-- ボタン -->
+  <!-- ✅ ボタン -->
   <div class="d-flex justify-content-center mt-4">
     <%= f.submit "登録", class: "btn btn-primary px-4 py-2 me-3" %>
     <%= link_to "戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2" %>
