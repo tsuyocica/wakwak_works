@@ -1,68 +1,105 @@
 <div class="container">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>作業場所</th>
-        <th>作業内容</th>
-        <th>作業期間</th>
-        <th>報酬</th>
-        <th>募集状況</th>
-        <th>応募の有無</th>
-        <th>チャット一覧</th>
-        <th>詳細</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% job_lists.each do |job| %>
+  <!-- ✅ PC時はテーブル表示 -->
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-striped">
+      <thead class="table-light">
         <tr>
-          <%# 作業場所 %>
-          <td><%= job.work_location %></td>
-          <%# 作業内容（文字制限 + 省略）%>
-          <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= job.work_description %>">
-            <%= truncate(job.work_description, length: 60, omission: "…") %>
-          </td>
-          <%# 作業期間（開始日 & 終了日を2段に）%>
-          <td>
-            <span><%= job.work_start_date.strftime('%Y/%m/%d') %></span><br>
-            〜 <span><%= job.work_end_date.strftime('%Y/%m/%d') %></span>
-          </td>
-          <%# 報酬（フォーマット統一）%>
-          <td><%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></td>
-          <%# 募集状況 %>
-          <td>
+          <th class="text-nowrap">作業場所</th>
+          <th class="text-nowrap">作業件名</th>
+          <th class="text-nowrap">作業期間</th>
+          <th class="text-nowrap">報酬</th>
+          <th class="text-nowrap">募集状況</th>
+          <th class="text-nowrap">応募の有無</th>
+          <th class="text-nowrap">チャット一覧</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% job_lists.each do |job| %>
+          <tr>
+            <!-- ✅ 作業場所 -->
+            <td class="align-middle"><%= job.work_location %></td>
+
+            <!-- ✅ 作業件名（クリックで詳細ページへ） -->
+            <td class="align-middle">
+              <%= link_to job.work_title, job_post_path(job), class: "text-decoration-none fw-bold text-dark" %>
+            </td>
+
+            <!-- ✅ 作業期間 -->
+            <td class="align-middle">
+              <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %>
+            </td>
+
+            <!-- ✅ 報酬 -->
+            <td class="align-middle"><%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></td>
+
+            <!-- ✅ 募集状況 -->
+            <td class="align-middle">
+              <% if job.work_status == "recruiting" %>
+                <span class="badge bg-success">募集中</span>
+              <% else %>
+                <span class="badge bg-secondary">受付終了</span>
+              <% end %>
+            </td>
+
+            <!-- ✅ 応募の有無 -->
+            <td class="align-middle">
+              <% if job.job_applications.any? %>
+                <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span>
+                <%= link_to "応募者一覧", applicants_job_post_path(job), class: "text-primary mt-1 text-decoration-none" %>
+              <% else %>
+                <span class="badge bg-secondary">応募なし</span>
+              <% end %>
+            </td>
+
+            <!-- ✅ チャット一覧 -->
+            <td class="align-middle">
+              <% if job.job_applications.any? %>
+                <%= link_to "一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
+              <% else %>
+                <span class="text-muted">なし</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ✅ スマホ時はカード形式 -->
+  <div class="d-block d-md-none">
+    <% job_lists.each do |job| %>
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <%= link_to job.work_title, job_post_path(job), class: "text-decoration-none fw-bold text-dark" %>
+          </h5>
+          <p class="card-text"><strong>作業場所:</strong> <%= job.work_location %></p>
+          <p class="card-text"><strong>作業期間:</strong> <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></p>
+          <p class="card-text"><strong>報酬:</strong> <%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></p>
+          <p class="card-text">
+            <strong>募集状況:</strong>
             <% if job.work_status == "recruiting" %>
               <span class="badge bg-success">募集中</span>
             <% else %>
               <span class="badge bg-secondary">受付終了</span>
             <% end %>
-          </td>
-          <%# 応募の有無（件数 + 応募者一覧リンク）%>
-          <td>
+          </p>
+          <p class="card-text">
+            <strong>応募の有無:</strong>
             <% if job.job_applications.any? %>
-              <div class="d-flex flex-column align-items-start">
-                <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span>
-                <%= link_to "応募者一覧を見る", applicants_job_post_path(job), class: "text-primary mt-1 text-decoration-none" %>
-              </div>
+              <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span>
+              <%= link_to "応募者一覧", applicants_job_post_path(job), class: "text-primary mt-1 text-decoration-none" %>
             <% else %>
               <span class="badge bg-secondary">応募なし</span>
             <% end %>
-          </td>
-
-          <%# チャット一覧 %>
-          <td>
-            <% if job.job_applications.any? %>
-              <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
-            <% else %>
-              <span class="text-muted">なし</span>
-            <% end %>
-          </td>
-
-          <%# 詳細 %>
-          <td>
-            <%= link_to "詳細", job_post_path(job), class: "btn btn-info btn-sm" %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+          </p>
+          <% if job.job_applications.any? %>
+            <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
+          <% else %>
+            <span class="text-muted">なし</span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
