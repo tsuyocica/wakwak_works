@@ -127,7 +127,7 @@
               <%= job.work_start_date.strftime('%Y/%m/%d') %><br>
                〜 <%= job.work_end_date.strftime('%Y/%m/%d') %>
             </td>
-            <td><%= number_to_currency(job.work_payment, unit: '¥', precision: 0) %></td>
+            <td> <%= number_to_currency(@job_post.work_payment, unit: "¥", precision: 0, format: "%u%n") %></td>
             <td>
               <% if job.work_status == "recruiting" %>
                 <span class="badge bg-success">募集中</span>

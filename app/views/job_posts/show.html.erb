@@ -5,6 +5,15 @@
       <%= @job_post.work_title %>
     </h1>
 
+    <!-- ✅ メイン画像 -->
+    <div class="text-center mb-4">
+      <% if @job_post.main_image.attached? %>
+        <%= image_tag @job_post.main_image.variant(resize_to_limit: [800, 500]), class: "img-fluid rounded shadow", alt: "メイン画像" %>
+      <% else %>
+        <%= image_tag "noimage.png", class: "img-fluid rounded shadow", alt: "No Image", width: 800, height: 500 %>
+      <% end %>
+    </div>
+
     <div class="row">
       <!-- 左カラム: 案件詳細 -->
       <div class="col-md-6">
@@ -13,7 +22,7 @@
         <p><strong>募集人数:</strong> <%= @job_post.work_capacity %> 名</p>
         <p><strong>作業開始日:</strong> <%= @job_post.work_start_date %></p>
         <p><strong>作業終了日:</strong> <%= @job_post.work_end_date %></p>
-        <p><strong>報酬:</strong> <%= number_to_currency(@job_post.work_payment, unit: "¥", precision: 0) %></p>
+        <p><strong>報酬:</strong> <%= number_to_currency(@job_post.work_payment, unit: "¥", precision: 0, format: "%u%n") %></p>
         <p><strong>作業現場:</strong> <%= @job_post.work_location %></p>
       </div>
 
