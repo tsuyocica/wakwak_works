@@ -1,65 +1,7 @@
 <div class="container mt-5">
   <div class="card shadow-sm p-4">
-    <!-- タイトル -->
-    <h1 class="mb-4 text-center fw-bold text-dark p-3 rounded" style="background-color: #f8f9fa; font-size: 1.75rem;">案件の編集</h1>
-
-    <!-- エラーメッセージの表示 -->
+    <h2 class="mb-4 text-center fw-bold text-dark p-3 rounded" style="background-color: #f8f9fa; font-size: 1.5rem;">案件編集</h2>
     <%= render "shared/error_messages", object: @job_post %>
-
-    <%= form_with(model: @job_post, local: true, html: { novalidate: true }) do |f| %>
-      <div class="row">
-        <!-- 左カラム -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <%= f.label :work_title, "案件名", class: "form-label fw-bold" %>
-            <%= f.text_field :work_title, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :work_description, "仕事内容", class: "form-label fw-bold" %>
-            <%= f.text_area :work_description, class: "form-control", required: true, rows: 4 %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :work_capacity, "募集人数", class: "form-label fw-bold" %>
-            <%= f.number_field :work_capacity, class: "form-control", required: true, min: 1 %>
-          </div>
-        </div>
-
-        <!-- 右カラム -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <%= f.label :work_start_date, "作業開始日", class: "form-label fw-bold" %>
-            <%= f.date_field :work_start_date, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :work_end_date, "作業終了日", class: "form-label fw-bold" %>
-            <%= f.date_field :work_end_date, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :work_payment, "報酬 (円)", class: "form-label fw-bold" %>
-            <%= f.number_field :work_payment, class: "form-control", required: true, min: 0 %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :work_location, "作業場所", class: "form-label fw-bold" %>
-            <%= f.text_field :work_location, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :work_status, "募集状況", class: "form-label fw-bold" %>
-            <%= f.select :work_status, [["募集中", "recruiting"], ["締め切り", "closed"]], {}, class: "form-select" %>
-          </div>
-        </div>
-      </div>
-
-      <!-- ボタン -->
-      <div class="d-flex justify-content-center mt-4">
-        <%= f.submit "更新する", class: "btn btn-primary me-3 px-4 py-2" %>
-        <%= link_to "キャンセル", job_post_path(@job_post), class: "btn btn-outline-secondary px-4 py-2" %>
-      </div>
-    <% end %>
+    <%= render "form", job_post: @job_post %>
   </div>
 </div>

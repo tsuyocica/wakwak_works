@@ -10,3 +10,7 @@ application.register("job-applications", JobApplicationsController);
 // job_post/indexビューの表示切り替え
 import ToggleViewController from "./toggle_view_controller";
 application.register("toggle-view", ToggleViewController);
+
+// 画像プレビュー & ファイルプレビューのStimulusコントローラを登録
+import ImagePreviewController from "./image_preview_controller";
+application.register("image-preview", ImagePreviewController);
