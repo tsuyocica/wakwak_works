@@ -45,18 +45,15 @@
             <!-- ✅ 応募状況によるボタン表示 -->
             <% if @job_post.work_status == "recruiting" %>
               <% if application.nil? %>
-                <!-- ✅ 募集中 & 未応募なら応募ボタン -->
                 <%= button_to "この案件に応募する", job_post_job_applications_path(@job_post),
                               method: :post, class: "btn btn-success mt-2", data: { confirm: "この案件に応募しますか？" } %>
 
               <% elsif application.status == "pending" %>
-                <!-- ✅ 募集中 & 応募済み（未承認）の場合、キャンセルボタンを表示 -->
                 <p class="text-danger mt-2"><strong>この案件に応募中です。投稿者から承認されるまでお待ちください。</strong></p>
                 <%= button_to "応募をキャンセル", job_post_job_application_path(@job_post, application),
                               method: :delete, class: "btn btn-danger mt-2", data: { confirm: "応募をキャンセルしますか？" } %>
 
               <% elsif application.status == "rejected" %>
-                <!-- ✅ 募集中 & 拒否された場合、メッセージを表示 -->
                 <p class="text-danger mt-2"><strong>残念ながら承認されませんでした。</strong></p>
               <% end %>
             <% end %>
@@ -76,10 +73,13 @@
         </div>
       <% end %>
 
-      <!-- ✅ 施工管理者用の編集ボタン -->
+      <!-- ✅ 施工管理者用の編集・削除ボタン -->
       <% if user_signed_in? && current_user == @job_post.user %>
-        <div class="col-md-6 mt-4 text-center">
-          <%= link_to "編集", edit_job_post_path(@job_post), class: "btn btn-warning px-4 py-2 shadow-sm" %>
+        <div class="d-flex justify-content-center col-md-12 mt-4 text-center">
+          <%= link_to "編集", edit_job_post_path(@job_post), class: "btn btn-warning px-4 py-2 shadow-sm me-2" %>
+
+          <%= button_to "削除", job_post_path(@job_post), method: :delete, class: "btn btn-danger px-4 py-2 shadow-sm",
+              data: { confirm: "この案件を削除してもよろしいですか？" } %>
         </div>
       <% end %>
     </div>
@@ -88,7 +88,7 @@
     <div class="d-flex justify-content-center mt-4">
       <%= link_to "一覧に戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2 shadow-sm me-2" %>
 
-      <% if current_user.role.include?("施工管理者") %>
+      <% if current_user.role == "施工管理者" %>
         <%= link_to "投稿した案件を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
       <% else %>
         <%= link_to "応募した案件を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
