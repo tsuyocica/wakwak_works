@@ -49,18 +49,20 @@
     <% end %>
   </div>
   <!-- ✅ ポジション切替（タイトル + ボタンを横並び） -->
-  <div class="d-flex align-items-center">
-    <h5 class="fw-bold me-3 mb-0">ポジション切替</h5>
-    <div class="btn-group">
-      <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
-          class: "btn btn-sm #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
-          disabled: current_user.role == '施工管理者' %>
+  <% if user_signed_in? %>
+    <div class="d-flex align-items-center">
+      <h5 class="fw-bold me-3 mb-0">ポジション切替</h5>
+      <div class="btn-group">
+        <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
+            class: "btn btn-sm #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+            disabled: current_user.role == '施工管理者' %>
 
-      <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
-          class: "btn btn-sm #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
-          disabled: current_user.role == '作業員' %>
+        <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
+            class: "btn btn-sm #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+            disabled: current_user.role == '作業員' %>
+      </div>
     </div>
-  </div>
+  <% end %>
   <!-- ✅ 表示切り替えボタン -->
   <div class="d-flex justify-content-end mb-3" data-controller="toggle-view">
     <button data-action="click->toggle-view#switchView" data-toggle-view-target="toggleButton" class="btn btn-outline-primary">

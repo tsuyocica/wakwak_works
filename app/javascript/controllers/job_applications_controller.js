@@ -22,7 +22,6 @@ export default class extends Controller {
       return;
     }
 
-    // 正しいURLに修正
     fetch(
       `/job_posts/${jobPostId}/job_applications/${applicationId}/update_status`,
       {
@@ -66,7 +65,7 @@ export default class extends Controller {
                   <input type="hidden" name="job_post_id" value="${jobPostId}">
                   <input type="hidden" name="worker_id" value="${
                     data.worker_id
-                  }">  <!-- ✅ 修正 -->
+                  }">
                   <button type="submit" class="btn btn-primary btn-sm">チャットを作成</button>
                 </form>
               `;

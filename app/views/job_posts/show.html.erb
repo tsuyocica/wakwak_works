@@ -28,43 +28,52 @@
         </div>
       </div>
 
-      <!-- ✅ 右カラム（作業員用の操作エリア / 承認済みなら非表示） -->
+      <!-- ✅ 右カラム（作業員用の操作エリア） -->
       <% if user_signed_in? && current_user.role == "作業員" && @job_post.user_id != current_user.id %>
         <% application = @job_post.job_applications.find_by(worker_id: current_user.id) %>
-        <% if application.nil? || application.status != "approved" %>
-          <div class="col-md-6">
-            <div class="bg-light p-3 rounded shadow-sm text-center">
-              <p><strong>募集状況:</strong>
-                <% if @job_post.work_status == "recruiting" %>
-                  <span class="badge bg-success px-3 py-2">募集中</span>
-                <% else %>
-                  <span class="badge bg-secondary px-3 py-2">受付終了</span>
-                <% end %>
-              </p>
 
-              <!-- ✅ 応募状況 -->
-              <% if application.present? %>
-                <% if application.status == "pending" %>
-                  <p class="text-danger mt-2"><strong>この案件に応募中です。投稿者から承認されるまでお待ちください。</strong></p>
-                  <%= button_to "応募をキャンセル", job_post_job_application_path(@job_post, application),
-                                method: :delete, class: "btn btn-danger mt-2", data: { confirm: "応募をキャンセルしますか？" } %>
-                <% end %>
+        <div class="col-md-6">
+          <div class="bg-light p-3 rounded shadow-sm text-center">
+            <p><strong>募集状況:</strong>
+              <% if @job_post.work_status == "recruiting" %>
+                <span class="badge bg-success px-3 py-2">募集中</span>
               <% else %>
-                <!-- ✅ 未応募なら応募ボタン -->
+                <span class="badge bg-secondary px-3 py-2">受付終了</span>
+              <% end %>
+            </p>
+
+            <!-- ✅ 応募状況によるボタン表示 -->
+            <% if @job_post.work_status == "recruiting" %>
+              <% if application.nil? %>
+                <!-- ✅ 募集中 & 未応募なら応募ボタン -->
                 <%= button_to "この案件に応募する", job_post_job_applications_path(@job_post),
                               method: :post, class: "btn btn-success mt-2", data: { confirm: "この案件に応募しますか？" } %>
+
+              <% elsif application.status == "pending" %>
+                <!-- ✅ 募集中 & 応募済み（未承認）の場合、キャンセルボタンを表示 -->
+                <p class="text-danger mt-2"><strong>この案件に応募中です。投稿者から承認されるまでお待ちください。</strong></p>
+                <%= button_to "応募をキャンセル", job_post_job_application_path(@job_post, application),
+                              method: :delete, class: "btn btn-danger mt-2", data: { confirm: "応募をキャンセルしますか？" } %>
+
+              <% elsif application.status == "rejected" %>
+                <!-- ✅ 募集中 & 拒否された場合、メッセージを表示 -->
+                <p class="text-danger mt-2"><strong>残念ながら承認されませんでした。</strong></p>
               <% end %>
-            </div>
+            <% end %>
+
+            <!-- ✅ 承認済みなら「チャットを開く」ボタンを表示（募集終了後も表示） -->
+            <% if application.present? && application.status == "approved" %>
+              <% chat = Chat.find_by(job_post_id: @job_post.id, owner_id: @job_post.user.id, worker_id: current_user.id) %>
+              <% if chat.present? %>
+                <div class="text-center mt-4">
+                  あなたは承認されています<br>
+                  <%= link_to "チャットを開く", chat_path(chat), class: "btn btn-primary px-4 py-2 shadow-sm" %>
+                </div>
+              <% end %>
+            <% end %>
+
           </div>
-        <% else %>
-          <!-- ✅ 承認済みなら「チャットを開く」ボタンを表示 -->
-          <% chat = Chat.find_by(job_post_id: @job_post.id, owner_id: @job_post.user.id, worker_id: current_user.id) %>
-          <% if chat.present? %>
-            <div class="text-center mt-4">
-              <%= link_to "チャットを開く", chat_path(chat), class: "btn btn-primary px-4 py-2 shadow-sm" %>
-            </div>
-          <% end %>
-        <% end %>
+        </div>
       <% end %>
 
       <!-- ✅ 施工管理者用の編集ボタン -->

@@ -3,7 +3,7 @@ import { application } from "controllers/application";
 import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading";
 eagerLoadControllersFrom("controllers", application);
 
-// 追加
+// job_post/applicantsビューの承認後に”チャットを開く”を表示
 import JobApplicationsController from "./job_applications_controller";
 application.register("job-applications", JobApplicationsController);
 
