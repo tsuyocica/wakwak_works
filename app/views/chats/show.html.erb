@@ -1,5 +1,5 @@
-<div class="container mt-4">
-  <div class="card shadow-sm p-4">
+<div class="container-fluid chat-container d-flex flex-column mt-4">
+  <div class="card shadow-sm p-4 d-flex flex-column flex-grow-1">
     <!-- ✅ チャットのタイトル -->
     <div class="d-flex align-items-center border-bottom pb-2">
       <!-- ✅ メイン画像（アイコン化） -->
@@ -23,22 +23,24 @@
     </div>
 
     <!-- ✅ メッセージ一覧 -->
-    <div class="messages-list flex-grow-1 overflow-auto mt-3" style="height: 400px;">
+    <div class="messages-list flex-grow-1 overflow-auto mt-3">
       <% @messages.each do |message| %>
         <%= render "messages/message", message: message %>
       <% end %>
     </div>
 
     <!-- ✅ メッセージ送信フォーム -->
-    <%= form_with(model: [@chat, Message.new], local: false, html: { multipart: true }) do |f| %>
-      <div class="input-group mt-3">
-        <%= f.text_area :content, class: "form-control", placeholder: "メッセージを入力" %>
-        <%= f.file_field :images, multiple: true, class: "form-control-file d-none", id: "image-upload" %>
-        <%= f.file_field :files, multiple: true, class: "form-control-file d-none", id: "file-upload" %>
-        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('image-upload').click()">📷</button>
-        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('file-upload').click()">📎</button>
-        <%= f.submit "送信", class: "btn btn-primary" %>
-      </div>
-    <% end %>
+    <div class="chat-form mt-3">
+      <%= form_with(model: [@chat, Message.new], local: false, html: { multipart: true }) do |f| %>
+        <div class="input-group">
+          <%= f.text_area :content, class: "form-control", placeholder: "メッセージを入力" %>
+          <%= f.file_field :images, multiple: true, class: "form-control-file d-none", id: "image-upload" %>
+          <%= f.file_field :files, multiple: true, class: "form-control-file d-none", id: "file-upload" %>
+          <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('image-upload').click()">📷</button>
+          <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('file-upload').click()">📎</button>
+          <%= f.submit "送信", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

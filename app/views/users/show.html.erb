@@ -1,26 +1,40 @@
-<h2 class="mb-3 text-center fw-bold">
-  <%= @user.username %> さんのマイページ
-  <span class="badge <%= @user.role.include?('施工管理者') ? 'bg-success' : 'bg-primary' %> fs-5">
-    <%= @user.role.include?("施工管理者") ? "施工管理者" : "作業員" %>
-  </span>
-</h2>
-
-<!-- プロフィール情報 -->
+<!-- ✅ プロフィール情報 -->
 <%= render "shared/profile", user: @user %>
 
-<!-- 投稿・応募一覧 -->
-<% if @user.role.include?("施工管理者") %>
-  <!-- 案件を登録するボタン（右寄せ） -->
-  <div class="d-flex justify-content-end mt-3">
-    <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-primary px-4 py-2" %>
+<!-- ✅ 本人のみ、案件一覧やボタンを表示 -->
+<% if current_user == @user %>
+  <div class="mt-4">
+    <!-- ✅ 役割切り替えボタン & 案件投稿ボタン -->
+    <div class="d-flex flex-wrap align-items-center gap-3">
+      <!-- ✅ ポジション切替（タイトル + ボタンを横並び） -->
+      <div class="d-flex align-items-center">
+        <h5 class="fw-bold me-3 mb-0">ポジション切替</h5>
+        <div class="btn-group">
+          <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
+              class: "btn btn-sm #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+              disabled: current_user.role == '施工管理者' %>
+
+          <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
+              class: "btn btn-sm #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+              disabled: current_user.role == '作業員' %>
+        </div>
+      </div>
+
+      <!-- ✅ 案件を登録するボタン（施工管理者のみ） -->
+      <% if @user.role.include?("施工管理者") %>
+        <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-primary px-4 py-2 shadow-sm" %>
+      <% end %>
+    </div>
+
+    <% if @user.role.include?("施工管理者") %>
+      <!-- ✅ 投稿した案件一覧 -->
+      <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📝 投稿した案件一覧</h3>
+      <%= render "shared/job_list_manager", title: "投稿した案件一覧", job_lists: @job_posts %>
+
+    <% else %>
+      <!-- ✅ 応募した案件一覧 -->
+      <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📌 応募した案件一覧</h3>
+      <%= render "shared/job_list", title: "応募した案件一覧", job_lists: @job_applications.map(&:job_post) %>
+    <% end %>
   </div>
-
-  <!-- 投稿した案件一覧の見出し -->
-  <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📝 投稿した案件一覧</h3>
-  <%= render "shared/job_list_manager", title: "投稿した案件一覧", job_lists: @job_posts %>
-
-<% else %>
-  <!-- 応募した案件一覧の見出し -->
-  <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📌 応募した案件一覧</h3>
-  <%= render "shared/job_list", title: "応募した案件一覧", job_lists: @job_applications.map(&:job_post) %>
 <% end %>

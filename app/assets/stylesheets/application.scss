@@ -40,26 +40,36 @@ input, textarea {
 }
 
 /************************ ヘッダー部 ************************/
-/* アプリタイトルのスタイル（Bootstrapで補完） */
+/* ✅ ヘッダー全体のデザイン */
+.navbar {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ✅ アプリタイトル（スマホ時に縮小） */
 .navbar-brand {
-  font-size: 2.5rem;
-  font-family: 'Poppins', sans-serif;
-  color: #2C3E50;
-  letter-spacing: 1px; /* 文字の間隔 */
+  font-size: 2rem;
+}
 
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    color: #3498db; /* ホバー時の色 */
-    text-decoration: none;
-    transform: scale(1.05); /* 少し拡大 */
-  }
-
-  &:active {
-    transform: scale(0.95); /* クリック時に押し込まれる */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.6rem;
   }
 }
 
+/* ✅ ドロップダウンメニューの幅調整 */
+.dropdown-menu {
+  min-width: 200px;
+}
+
+/* ✅ ハンバーガーメニュー時の余白調整 */
+@media (max-width: 768px) {
+  .navbar-collapse {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+  }
+}
 /************************ トップページ ************************/
 // ✅ ユーザー名のデザイン調整
 .user-link {
@@ -118,8 +128,24 @@ input, textarea {
 }
 
 /************************ チャットページ ************************/
-/* メッセージリストのスタイル（Bootstrapで補完） */
+/* ✅ チャットページのコンテナの高さを動的に調整 */
+.chat-container {
+  height: calc(100vh - 60px); /* 画面全体の高さからヘッダーの高さを引く */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ メッセージリストをスクロール可能に */
 .messages-list {
-  max-height: calc(100vh - 300px); /* 画面全体の高さからヘッダー＆フッター分を引く */
+  flex-grow: 1; /* 残りのスペースをすべて使う */
   overflow-y: auto; /* スクロール可能 */
+  max-height: calc(100vh - 200px); /* ヘッダー＆フォームを考慮して高さを調整 */
+}
+
+/* ✅ 送信フォームの固定 */
+.chat-form {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding-top: 10px;
 }

@@ -3,7 +3,7 @@ import { application } from "controllers/application";
 import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading";
 eagerLoadControllersFrom("controllers", application);
 
-// 追加
+// job_post/applicantsビューの承認後に”チャットを開く”を表示
 import JobApplicationsController from "./job_applications_controller";
 application.register("job-applications", JobApplicationsController);
 
@@ -11,6 +11,6 @@ application.register("job-applications", JobApplicationsController);
 import ToggleViewController from "./toggle_view_controller";
 application.register("toggle-view", ToggleViewController);
 
-// 画像プレビュー & ファイルプレビューのStimulusコントローラを登録
+// job_post/new、showビューページの画像プレビュー & ファイルプレビュー
 import ImagePreviewController from "./image_preview_controller";
 application.register("image-preview", ImagePreviewController);
