@@ -128,8 +128,24 @@ input, textarea {
 }
 
 /************************ チャットページ ************************/
-/* メッセージリストのスタイル（Bootstrapで補完） */
+/* ✅ チャットページのコンテナの高さを動的に調整 */
+.chat-container {
+  height: calc(100vh - 60px); /* 画面全体の高さからヘッダーの高さを引く */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ メッセージリストをスクロール可能に */
 .messages-list {
-  max-height: calc(100vh - 300px); /* 画面全体の高さからヘッダー＆フッター分を引く */
+  flex-grow: 1; /* 残りのスペースをすべて使う */
   overflow-y: auto; /* スクロール可能 */
+  max-height: calc(100vh - 200px); /* ヘッダー＆フォームを考慮して高さを調整 */
+}
+
+/* ✅ 送信フォームの固定 */
+.chat-form {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding-top: 10px;
 }

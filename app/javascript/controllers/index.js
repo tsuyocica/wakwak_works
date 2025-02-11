@@ -11,6 +11,6 @@ application.register("job-applications", JobApplicationsController);
 import ToggleViewController from "./toggle_view_controller";
 application.register("toggle-view", ToggleViewController);
 
-// 画像プレビュー & ファイルプレビューのStimulusコントローラを登録
+// job_post/new、showビューページの画像プレビュー & ファイルプレビュー
 import ImagePreviewController from "./image_preview_controller";
 application.register("image-preview", ImagePreviewController);
