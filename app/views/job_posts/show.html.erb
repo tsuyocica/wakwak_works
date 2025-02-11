@@ -84,9 +84,15 @@
       <% end %>
     </div>
 
-    <!-- ✅ 戻るボタン -->
+    <!-- ✅ 戻るボタンと役割に応じたボタン -->
     <div class="d-flex justify-content-center mt-4">
-      <%= link_to "一覧に戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2 shadow-sm" %>
+      <%= link_to "一覧に戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2 shadow-sm me-2" %>
+
+      <% if current_user.role.include?("施工管理者") %>
+        <%= link_to "投稿した案件を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
+      <% else %>
+        <%= link_to "応募した案件を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
+      <% end %>
     </div>
   </div>
 </div>

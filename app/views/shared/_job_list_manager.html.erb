@@ -30,7 +30,7 @@
             </td>
 
             <!-- ✅ 報酬 -->
-            <td class="align-middle"><%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></td>
+            <td class="align-middle text-nowrap"><%= number_to_currency(job.work_payment, unit: "¥ ", precision: 0, format: "%u%n") %></td>
 
             <!-- ✅ 募集状況 -->
             <td class="align-middle">
@@ -44,7 +44,7 @@
             <!-- ✅ 応募の有無 -->
             <td class="align-middle">
               <% if job.job_applications.any? %>
-                <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span>
+                <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span><br>
                 <%= link_to "応募者一覧", applicants_job_post_path(job), class: "text-primary mt-1 text-decoration-none" %>
               <% else %>
                 <span class="badge bg-secondary">応募なし</span>

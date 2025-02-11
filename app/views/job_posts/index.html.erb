@@ -50,17 +50,24 @@
   </div>
   <!-- ✅ ポジション切替（タイトル + ボタンを横並び） -->
   <% if user_signed_in? %>
-    <div class="d-flex align-items-center">
-      <h5 class="fw-bold me-3 mb-0">ポジション切替</h5>
-      <div class="btn-group">
-        <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
-            class: "btn btn-sm #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
-            disabled: current_user.role == '施工管理者' %>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div class="d-flex align-items-center">
+        <h5 class="fw-bold me-3 mb-0">ポジション切替</h5>
+        <div class="btn-group">
+          <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
+              class: "btn btn-sm #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+              disabled: current_user.role == '施工管理者', data: { turbo: false } %>
 
-        <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
-            class: "btn btn-sm #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
-            disabled: current_user.role == '作業員' %>
+          <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
+              class: "btn btn-sm #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+              disabled: current_user.role == '作業員', data: { turbo: false } %>
+        </div>
       </div>
+
+      <!-- ✅ 施工管理者のみ「案件を投稿する」ボタンを表示 -->
+      <% if current_user.role == "施工管理者" %>
+        <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-info d-flex align-items-center justify-content-start mb-3" %>
+      <% end %>
     </div>
   <% end %>
 
