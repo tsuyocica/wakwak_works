@@ -77,3 +77,4 @@ group :production do
 end
 gem "ransack", "~> 4.2"
 gem "rails-i18n", "~> 7.0"
+gem 'redis'
