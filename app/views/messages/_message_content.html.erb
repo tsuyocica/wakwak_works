@@ -1,0 +1,12 @@
+<div class="d-flex flex-column mt-2">
+  <!-- ✅ 日時（枠の外側） -->
+  <span class="text-muted small mb-1 <%= message.sender_id == current_user.id ? 'align-self-start ms-auto' : 'align-self-end me-auto' %>">
+    <%= message.created_at.strftime('%Y/%m/%d %H:%M') %>
+  </span>
+
+  <!-- ✅ メッセージ本体（枠） -->
+  <div class="p-2 rounded-2 text-dark"
+       style="max-width: 60%; width: auto; <%= message.sender_id == current_user.id ? 'margin-left: auto; background-color: white; border: 1px solid #ccc;' : 'margin-right: auto; background-color: #f8f9fa;' %>">
+    <p class="mb-1"><%= message.content %></p>
+  </div>
+</div>

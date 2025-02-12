@@ -8,9 +8,14 @@ class MessagesController < ApplicationController
     @message.sender = current_user
 
     if @message.save
-      # ✅ WebSocket でメッセージを送信（current_user を渡さない）
       MessageChannel.broadcast_to(@chat, {
-        message_html: render_message(@message, current_user.id),
+        message_content: render_to_string(
+          partial: "messages/message_content",
+          locals: { message: @message }
+        ),
+        sender_id: @message.sender_id,
+        content: @message.content, # ✅ メッセージ本文
+        timestamp: @message.created_at.strftime('%Y/%m/%d %H:%M') # ✅ 送信日時
       })
     end
 
@@ -29,13 +34,5 @@ class MessagesController < ApplicationController
 
   def message_params
     params.require(:message).permit(:content, images: [], files: [])
-  end
-
-  # ✅ `current_user` を渡さず、`sender_id` を明示的に渡す
-  def render_message(message, sender_id)
-    ApplicationController.renderer.render(
-      partial: "messages/message",
-      locals: { message: message, sender_id: sender_id }
-    )
   end
 end
