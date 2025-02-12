@@ -28,19 +28,19 @@
         <%= render "messages/message", message: message_data[:message], sender_id: message_data[:sender_id] %>
       <% end %>
     </div>
+  </div>
 
-    <!-- ✅ メッセージ送信フォーム -->
-    <div class="chat-form mt-3" id="message-form">
-      <%= form_with(model: [@chat, Message.new], local: false, html: { multipart: true }) do |f| %>
-        <div class="input-group">
-          <%= f.text_area :content, class: "form-control", placeholder: "メッセージを入力" %>
-          <%= f.file_field :images, multiple: true, class: "form-control-file d-none", id: "image-upload" %>
-          <%= f.file_field :files, multiple: true, class: "form-control-file d-none", id: "file-upload" %>
-          <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('image-upload').click()">📷</button>
-          <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('file-upload').click()">📎</button>
-          <%= f.submit "送信", class: "btn btn-primary" %>
-        </div>
-      <% end %>
-    </div>
+  <!-- ✅ メッセージ送信フォーム -->
+  <div class="chat-form mb-3" id="message-form">
+    <%= form_with(model: [@chat, Message.new], local: false, html: { multipart: true }) do |f| %>
+      <div class="input-group">
+        <%= f.text_area :content, class: "form-control", placeholder: "メッセージを入力" %>
+        <%= f.file_field :images, multiple: true, class: "form-control-file d-none", id: "image-upload" %>
+        <%= f.file_field :files, multiple: true, class: "form-control-file d-none", id: "file-upload" %>
+        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('image-upload').click()">📷</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('file-upload').click()">📎</button>
+        <%= f.submit "送信", class: "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
 </div>

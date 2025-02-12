@@ -145,7 +145,7 @@ input, textarea {
 /* ✅ 送信フォームの固定 */
 .chat-form {
   position: sticky;
-  bottom: 0;
+  bottom: 8px;
   background: white;
   padding-top: 10px;
 }
