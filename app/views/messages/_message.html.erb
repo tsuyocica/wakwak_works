@@ -1,5 +1,5 @@
 <div class="d-flex align-items-start mt-2">
-  <div class="message-container <%= message.sender == current_user ? 'text-end ms-auto' : 'text-start' %>">
+  <div class="message-container <%= message.sender.id == (defined?(sender_id) ? sender_id : nil) ? 'text-end ms-auto' : 'text-start' %>">
     <div class="message-header d-flex align-items-center">
       <strong class="me-2"><%= message.sender.username %></strong>
       <span class="text-muted small"><%= message.created_at.strftime('%Y/%m/%d %H:%M') %></span>

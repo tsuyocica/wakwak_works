@@ -23,14 +23,14 @@
     </div>
 
     <!-- ✅ メッセージ一覧 -->
-    <div class="messages-list flex-grow-1 overflow-auto mt-3">
-      <% @messages.each do |message| %>
-        <%= render "messages/message", message: message %>
+    <div class="messages-list flex-grow-1 overflow-auto mt-3" id="messages">
+      <% @messages.each do |message_data| %>
+        <%= render "messages/message", message: message_data[:message], sender_id: message_data[:sender_id] %>
       <% end %>
     </div>
 
     <!-- ✅ メッセージ送信フォーム -->
-    <div class="chat-form mt-3">
+    <div class="chat-form mt-3" id="message-form">
       <%= form_with(model: [@chat, Message.new], local: false, html: { multipart: true }) do |f| %>
         <div class="input-group">
           <%= f.text_area :content, class: "form-control", placeholder: "メッセージを入力" %>
