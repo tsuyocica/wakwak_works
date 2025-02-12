@@ -8,14 +8,16 @@ class MessagesController < ApplicationController
     @message.sender = current_user
 
     if @message.save
-      respond_to do |format|
-        format.json # ここでJS側と連携（後で実装）
-      end
-    else
-      respond_to do |format|
-        format.html { redirect_to chat_path(@chat), alert: "メッセージの送信に失敗しました。" }
-        format.json { render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity }
-      end
+      # ✅ WebSocket でメッセージを送信（current_user を渡さない）
+      MessageChannel.broadcast_to(@chat, {
+        message_html: render_message(@message, current_user.id),
+      })
+    end
+
+    # ✅ TurboStream用のレスポンス
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to chat_path(@chat) }
     end
   end
 
@@ -27,5 +29,13 @@ class MessagesController < ApplicationController
 
   def message_params
     params.require(:message).permit(:content, images: [], files: [])
+  end
+
+  # ✅ `current_user` を渡さず、`sender_id` を明示的に渡す
+  def render_message(message, sender_id)
+    ApplicationController.renderer.render(
+      partial: "messages/message",
+      locals: { message: message, sender_id: sender_id }
+    )
   end
 end
