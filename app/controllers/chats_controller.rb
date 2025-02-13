@@ -10,7 +10,7 @@ class ChatsController < ApplicationController
   # 個別チャットルーム（メッセージ表示）
   def show
     @chat_list = fetch_chat_list
-    @messages = @chat.messages.includes(:sender) # メッセージを取得
+    @messages = @chat.messages.map { |message| { message: message, sender_id: current_user.id } }
     @partner = @chat.owner == current_user ? @chat.worker : @chat.owner # チャット相手を取得
   end
 

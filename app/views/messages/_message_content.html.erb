@@ -1,0 +1,39 @@
+<div class="d-flex flex-column mt-2">
+  <!-- ✅ 日時（枠の外側） -->
+  <span class="text-muted small mb-1 <%= message.sender_id == current_user.id ? 'align-self-start ms-auto' : 'align-self-end me-auto' %>">
+    <%= message.created_at.strftime('%Y/%m/%d %H:%M') %>
+  </span>
+
+  <!-- ✅ メッセージ本体（枠） -->
+  <div class="p-2 rounded-2 text-dark <%= message.sender_id == current_user.id ? 'text-end ms-auto bg-white border border-info-subtle' : 'text-start bg-light' %>"
+       style="max-width: 60%; width: auto;">
+
+    <!-- ✅ メッセージ本文 -->
+    <% if message.content.present? %>
+    <p class="mb-1"><%= message.content %></p>
+    <% end %>
+
+    <!-- ✅ 画像の表示 -->
+    <% if message.images.attached? %>
+      <div class="mt-2">
+        <% message.images.each do |image| %>
+          <a href="<%= url_for(image) %>" target="_blank">
+            <img src="<%= url_for(image) %>" class="img-fluid rounded" style="max-width: 100px; max-height: 100px;">
+          </a>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- ✅ ファイルの表示 -->
+    <% if message.files.attached? %>
+      <div class="mt-2">
+        <% message.files.each do |file| %>
+          <a href="<%= url_for(file) %>" target="_blank" class="d-block text-truncate" style="max-width: 100%;">
+            📎 <%= file.filename.to_s %>
+          </a>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+</div>

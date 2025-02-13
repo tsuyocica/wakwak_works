@@ -8,14 +8,23 @@ class MessagesController < ApplicationController
     @message.sender = current_user
 
     if @message.save
-      respond_to do |format|
-        format.json # ここでJS側と連携（後で実装）
-      end
-    else
-      respond_to do |format|
-        format.html { redirect_to chat_path(@chat), alert: "メッセージの送信に失敗しました。" }
-        format.json { render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity }
-      end
+      MessageChannel.broadcast_to(@chat, {
+        message_content: render_to_string(
+          partial: "messages/message_content",
+          locals: { message: @message }
+        ),
+        sender_id: @message.sender_id,
+        content: @message.content, # ✅ メッセージ本文
+        images: @message.images.map { |img| url_for(img) },
+        files: @message.files.map { |file| { name: file.filename.to_s, url: url_for(file) } },
+        timestamp: @message.created_at.strftime('%Y/%m/%d %H:%M') # ✅ 送信日時
+      })
+    end
+
+    # ✅ TurboStream用のレスポンス
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to chat_path(@chat) }
     end
   end
 
