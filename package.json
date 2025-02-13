@@ -8,8 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild app/javascript/*.* --bundle --outdir=app/assets/builds"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -24,7 +23,6 @@
   "homepage": "https://github.com/tsuyocica/wakwak_works#readme",
   "dependencies": {
     "@hotwired/turbo-rails": "^8.0.12",
-    "esbuild": "^0.25.0",
     "stimulus": "^3.2.2"
   }
 }
