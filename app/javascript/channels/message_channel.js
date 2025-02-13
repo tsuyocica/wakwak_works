@@ -19,6 +19,8 @@ if (location.pathname.match(/\/chats\/\d+/)) {
       },
 
       received(data) {
+        console.log("📩 受信データ:", data);
+
         const messagesContainer = document.getElementById("messages");
         if (messagesContainer) {
           // ✅ メッセージ全体のラッパー
@@ -43,7 +45,7 @@ if (location.pathname.match(/\/chats\/\d+/)) {
               "ms-auto",
               "bg-white",
               "border",
-              "border-secondary"
+              "border-info-subtle"
             ); // ✅ 送信者: ボーダー付き
             messageTimestamp.classList.add("align-self-start", "ms-auto"); // ✅ 左側に配置
             messageContainer.style.marginLeft = "auto";
@@ -54,14 +56,68 @@ if (location.pathname.match(/\/chats\/\d+/)) {
             messageContainer.style.marginRight = "auto";
           }
 
-          // ✅ メッセージ本文
-          const messageContent = document.createElement("p");
-          messageContent.classList.add("mb-1");
-          messageContent.textContent = data.content;
+          // ✅ メッセージ本文（空でない場合のみ追加）
+          if (data.content && data.content.trim() !== "") {
+            const messageContent = document.createElement("p");
+            messageContent.classList.add("mb-1");
+            messageContent.textContent = data.content;
+            messageContainer.appendChild(messageContent);
+          }
 
-          // ✅ 日時とメッセージを追加
+          // ✅ 画像の表示
+          if (data.images && data.images.length > 0) {
+            console.log("📷 画像を追加:", data.images);
+            const imageWrapper = document.createElement("div");
+            imageWrapper.classList.add("mt-2");
+
+            data.images.forEach((imageUrl) => {
+              const imageLink = document.createElement("a");
+              imageLink.href = imageUrl;
+              imageLink.target = "_blank";
+
+              const imageElement = document.createElement("img");
+              imageElement.src = imageUrl;
+              imageElement.classList.add("img-fluid", "rounded");
+              imageElement.style.maxWidth = "100px";
+              imageElement.style.maxHeight = "100px";
+
+              imageLink.appendChild(imageElement);
+              imageWrapper.appendChild(imageLink);
+            });
+
+            messageContainer.appendChild(imageWrapper);
+          }
+
+          // ✅ ファイルの表示
+          if (data.files && data.files.length > 0) {
+            console.log("📎 ファイルを追加:", data.files);
+            const fileWrapper = document.createElement("div");
+            fileWrapper.classList.add("mt-2");
+
+            data.files.forEach((fileObj) => {
+              if (fileObj && typeof fileObj.url === "string") {
+                const fileLink = document.createElement("a");
+                fileLink.href = fileObj.url;
+                fileLink.target = "_blank";
+                fileLink.classList.add("d-block", "text-truncate");
+                fileLink.style.maxWidth = "100%";
+                fileLink.textContent = `📎 ${
+                  fileObj.name || fileObj.url.split("/").pop()
+                }`; // ファイル名を取得
+
+                fileWrapper.appendChild(fileLink);
+              } else {
+                console.warn("⚠️ 無効なファイルデータ:", fileObj);
+              }
+            });
+
+            messageContainer.appendChild(fileWrapper);
+          }
+
+          // ✅ 日時をセット
           messageTimestamp.textContent = data.timestamp;
-          messageContainer.appendChild(messageContent);
+
+          // ✅ 要素を追加
           messageWrapper.appendChild(messageTimestamp);
           messageWrapper.appendChild(messageContainer);
           messagesContainer.appendChild(messageWrapper);
@@ -80,6 +136,9 @@ if (location.pathname.match(/\/chats\/\d+/)) {
       form.addEventListener("submit", (event) => {
         setTimeout(() => {
           form.reset(); // フォームをクリア
+          // ✅ ファイル入力もクリア
+          const fileInputs = form.querySelectorAll('input[type="file"]');
+          fileInputs.forEach((input) => (input.value = ""));
         }, 100);
       });
     }

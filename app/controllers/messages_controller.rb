@@ -15,6 +15,8 @@ class MessagesController < ApplicationController
         ),
         sender_id: @message.sender_id,
         content: @message.content, # ✅ メッセージ本文
+        images: @message.images.map { |img| url_for(img) },
+        files: @message.files.map { |file| { name: file.filename.to_s, url: url_for(file) } },
         timestamp: @message.created_at.strftime('%Y/%m/%d %H:%M') # ✅ 送信日時
       })
     end
