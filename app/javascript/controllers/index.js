@@ -1,16 +1,24 @@
-// Import and register all your controllers from the importmap via controllers/**/*_controller
-import { application } from "controllers/application";
-import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading";
-eagerLoadControllersFrom("controllers", application);
+// import { application } from "controllers/application";
+// import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading";
 
-// job_post/applicantsビューの承認後に”チャットを開く”を表示
-import JobApplicationsController from "./job_applications_controller";
-application.register("job-applications", JobApplicationsController);
+// // ✅ Stimulus の動作確認用ログ（追加！）
+// console.log("Stimulus is running:", application);
+// console.log("Registered controllers:", application.router.modulesByIdentifier);
 
-// job_post/indexビューの表示切り替え
-import ToggleViewController from "./toggle_view_controller";
-application.register("toggle-view", ToggleViewController);
+// // すべてのコントローラーを自動ロード
+// eagerLoadControllersFrom("controllers", application);
 
-// job_post/new、showビューページの画像プレビュー & ファイルプレビュー
-import ImagePreviewController from "./image_preview_controller";
-application.register("image-preview", ImagePreviewController);
+// // 👇 **手動でコントローラーを登録する**
+// import AvatarPreviewController from "./avatar_preview_controller";
+// import ImagePreviewController from "./image_preview_controller";
+// import JobApplicationsController from "./job_applications_controller";
+// import ToggleViewController from "./toggle_view_controller";
+
+// application.register("avatar-preview", AvatarPreviewController);
+// application.register("image-preview", ImagePreviewController);
+// application.register("job-applications", JobApplicationsController);
+// application.register("toggle-view", ToggleViewController);
+
+// // デバッグ情報を確認
+// console.log("Stimulus initialized:", application);
+// window.Stimulus = application;

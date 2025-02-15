@@ -1,0 +1,45 @@
+<!-- ✅ カード形式の表示（デフォルト） -->
+<div id="card-view" class="container">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% job_posts.each do |job| %>
+      <div class="col">
+        <%= link_to job_post_path(job), class: "text-decoration-none" do %>
+          <div class="card shadow-sm h-100 position-relative">
+            <!-- ✅ 受付終了バンド -->
+            <% if job.work_status == "closed" %>
+              <div class="position-absolute top-50 start-50 translate-middle bg-dark text-white py-2 px-4 fw-bold"
+                    style="opacity: 0.8; font-size: 2rem;">
+                受付終了
+              </div>
+            <% end %>
+
+            <!-- ✅ 画像のトリミング -->
+            <% if job.main_image.attached? %>
+              <%= image_tag job.main_image.variant(resize_to_fill: [400, 250]), class: "card-img-top img-fluid", alt: "工事現場画像", style: "height: 250px; object-fit: cover;" %>
+            <% else %>
+              <%= image_tag "noimage.png", class: "card-img-top img-fluid", alt: "画像なし", style: "height: 250px; object-fit: cover;" %>
+            <% end %>
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title text-truncate text-dark" style="max-height: 3em;">
+                <%= truncate(job.work_title, length: 40, omission: "…") %>
+              </h5>
+              <div class="mt-auto text-secondary">
+                <p class="mb-1"><i class="bi bi-geo-alt"></i> <%= job.work_location %></p>
+                <p class="mb-1"><i class="bi bi-calendar"></i> <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></p>
+                <p class="mb-1 text-danger"><i class="bi bi-cash"></i> ¥ <%= number_to_currency(job.work_payment, unit: "", precision: 0) %></p>
+                <p class="mb-1">
+                  <% if job.work_status == "recruiting" %>
+                    <span class="badge bg-success">募集中</span>
+                  <% else %>
+                    <br>
+                  <% end %>
+                </p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

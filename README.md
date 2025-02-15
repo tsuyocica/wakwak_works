@@ -106,6 +106,7 @@ ER 図を添付。（ゆくゆく形になってきたら ER 図を完成させ�
 - `belongs_to :user`
 - `has_many :job_applications, dependent: :destroy`
 - `has_many :chats, dependent: :destroy`
+- `has_one_attached :main_image`
 
 ---
 

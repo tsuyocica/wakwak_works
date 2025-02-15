@@ -317,7 +317,7 @@ DEPENDENCIES
   debug
   devise
   image_processing (~> 1.2)
-  importmap-rails
+  importmap-rails (~> 2.1)
   jbuilder
   jquery-rails
   mysql2 (~> 0.5)

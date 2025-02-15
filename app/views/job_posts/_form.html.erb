@@ -2,24 +2,18 @@
   <div class="row">
     <!-- ✅ 左カラム：メイン画像 -->
     <div class="col-md-6">
-      <!-- ✅ メイン画像 -->
-      <div class="mb-3" data-controller="image-preview">
+      <div class="mb-3">
         <%= f.label :main_image, "メイン画像", class: "form-label fw-bold" %>
-        <%= f.file_field :main_image, class: "form-control d-none", accept: "image/*",
-              data: { action: "change->image-preview#displayMainImage", image_preview_target: "mainImageInput" } %>
+        <%= f.file_field :main_image, class: "form-control d-none", accept: "image/*", id: "main-image-input" %>
 
-        <div id="main-image-preview" class="border p-3 d-flex align-items-center justify-content-center position-relative"
-            data-image-preview-target="mainImagePreview"
-            data-action="click->image-preview#triggerMainImageSelection">
-
+        <div id="main-image-preview" class="border p-3 d-flex align-items-center justify-content-center position-relative">
           <% if @job_post.persisted? && @job_post.main_image.attached? %>
-            <img src="<%= url_for(@job_post.main_image) %>" class="img-thumbnail w-100 h-100 object-fit-cover">
+            <img src="<%= url_for(@job_post.main_image) %>" class="img-thumbnail w-100 h-100 object-fit-cover" id="main-preview">
           <% else %>
-            <img src="<%= asset_path('noimage.png') %>" class="img-thumbnail w-100 h-100 object-fit-cover">
+            <img src="<%= asset_path('noimage.png') %>" class="img-thumbnail w-100 h-100 object-fit-cover" id="main-preview">
           <% end %>
 
-          <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0"
-            data-action="click->image-preview#removeMainImage">×</button>
+          <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" id="remove-main-image">×</button>
         </div>
       </div>
     </div>
@@ -86,3 +80,61 @@
     <%= link_to "戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2" %>
   </div>
 <% end %>
+
+<!-- ✅ ここから JavaScript -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("✅ JavaScript がロードされました");
+
+    const mainImageInput = document.getElementById("main-image-input");
+    const mainPreview = document.getElementById("main-preview");
+    const removeMainImageButton = document.getElementById("remove-main-image");
+
+    if (!mainImageInput || !mainPreview || !removeMainImageButton) {
+      console.warn("⚠ 必要な要素が見つかりません");
+      return;
+    }
+
+    // ✅ 画像が選択されたときの処理
+    mainImageInput.addEventListener("change", (event) => {
+      console.log("✅ メイン画像が選択されました");
+
+      if (!event.target.files.length) {
+        console.warn("⚠ ファイルが選択されていません");
+        return;
+      }
+
+      const file = event.target.files[0];
+
+      if (!file.type.startsWith("image/")) {
+        console.error("❌ 選択されたファイルは画像ではありません");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("画像は5MB以下のファイルを選択してください");
+        event.target.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        mainPreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ✅ 削除ボタンが押されたときの処理
+    removeMainImageButton.addEventListener("click", () => {
+      console.log("✅ メイン画像を削除しました");
+      mainPreview.src = "<%= asset_path('noimage.png') %>"; // デフォルト画像に変更
+      mainImageInput.value = ""; // 選択したファイルをリセット
+    });
+
+    // ✅ 画像プレビューをクリックで `input[type="file"]` を開く
+    mainPreview.addEventListener("click", () => {
+      console.log("✅ メイン画像をクリックしました（ファイル選択を開く）");
+      mainImageInput.click();
+    });
+  });
+</script>

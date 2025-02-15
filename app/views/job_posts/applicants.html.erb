@@ -1,4 +1,4 @@
-<div class="container mt-5" data-controller="job-applications" data-job-post-id="<%= @job_post.id %>">
+<div class="container mt-5" data-job-post-id="<%= @job_post.id %>">
   <!-- 案件タイトル -->
   <h1 class="fw-bold text-center text-dark p-3 rounded" style="background-color: #f8f9fa;">
     <%= @job_post.work_title %>
@@ -37,8 +37,7 @@
           <%# 応募の状態（非同期更新ボタン + アイコン）%>
           <td class="text-center align-middle">
             <div class="d-flex justify-content-center align-items-center gap-2">
-              <select class="form-select border-0 bg-transparent w-auto"
-                data-action="change->job-applications#updateStatus"
+              <select class="form-select border-0 bg-transparent w-auto status-select"
                 data-application-id="<%= application.id %>"
                 data-chat-target="#chat-room-<%= application.id %>"
                 data-status-icon="#status-icon-<%= application.id %>"
@@ -58,7 +57,7 @@
           </td>
 
           <%# チャットルーム（承認済みならリンク表示） %>
-          <td class="text-center align-middle" id="chat-room-<%= application.id %>">
+          <td class="text-center align-middle chat-room" id="chat-room-<%= application.id %>">
             <% chat = Chat.find_by(job_post: application.job_post, worker: application.worker) %>
             <% if application.status == "approved" %>
               <% if chat.present? %>
@@ -79,3 +78,77 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("✅ Job Applications Script Loaded!");
+
+    document.querySelectorAll(".status-select").forEach(selectElement => {
+      selectElement.addEventListener("change", function(event) {
+        const applicationId = selectElement.dataset.applicationId;
+        const jobPostId = document.querySelector("[data-job-post-id]").dataset.jobPostId;
+        const newStatus = selectElement.value;
+        const chatRoomCell = document.querySelector(selectElement.dataset.chatTarget);
+        const statusIcon = document.querySelector(selectElement.dataset.statusIcon);
+
+        if (!jobPostId || jobPostId === "0") {
+          console.error("❌ job_post_id が無効です:", jobPostId);
+          return;
+        }
+
+        fetch(`/job_posts/${jobPostId}/job_applications/${applicationId}/update_status`, {
+          method: "PATCH",
+          headers: {
+            "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ status: newStatus })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            console.log("✅ 応募の状態更新成功:", data.status);
+
+            // **アイコンの更新**
+            if (statusIcon) {
+              statusIcon.innerHTML =
+                data.status === "approved"
+                  ? `<i class="bi bi-check-circle-fill text-success"></i>`
+                  : data.status === "rejected"
+                  ? `<i class="bi bi-x-circle-fill text-danger"></i>`
+                  : "";
+            }
+
+            // **チャットルームのボタンを動的に変更**
+            if (chatRoomCell) {
+              if (data.status === "approved") {
+                chatRoomCell.innerHTML = `
+                  <form action="/chats" method="POST">
+                    <input type="hidden" name="authenticity_token" value="${
+                      document.querySelector('meta[name="csrf-token"]').content
+                    }">
+                    <input type="hidden" name="job_post_id" value="${jobPostId}">
+                    <input type="hidden" name="worker_id" value="${data.worker_id}">
+                    <button type="submit" class="btn btn-primary btn-sm">チャットを作成</button>
+                  </form>
+                `;
+              } else {
+                chatRoomCell.innerHTML = `<span class="text-muted">-</span>`;
+              }
+            }
+          } else {
+            alert("⚠️ 更新に失敗しました");
+          }
+        })
+        .catch(error => {
+          console.error("❌ エラー:", error);
+        });
+      });
+    });
+  });
+</script>

@@ -21,33 +21,8 @@
   </div>
 
   <!-- ✅ 検索フォーム -->
-  <div class="card p-3 mb-4">
-    <%= search_form_for @q, url: job_posts_path, method: :get, class: "row g-3" do |f| %>
-      <div class="col-md-3">
-        <%= f.label :work_location_cont, "場所", class: "form-label" %>
-        <%= f.search_field :work_location_cont, class: "form-control", placeholder: "例: 東京、大阪" %>
-      </div>
-      <div class="col-md-3">
-        <%= f.label :work_title_cont, "作業内容", class: "form-label" %>
-        <%= f.search_field :work_title_cont, class: "form-control", placeholder: "例: 電気工事" %>
-      </div>
-      <div class="col-md-3">
-        <%= f.label :work_start_date_gteq, "開始日", class: "form-label" %>
-        <%= f.date_field :work_start_date_gteq, class: "form-control" %>
-      </div>
-      <div class="col-md-3">
-        <%= f.label :work_end_date_lteq, "終了日", class: "form-label" %>
-        <%= f.date_field :work_end_date_lteq, class: "form-control" %>
-      </div>
-      <div class="col-md-3">
-        <%= f.label :work_status_eq, "募集状況", class: "form-label" %>
-        <%= f.select :work_status_eq, [["", nil], ["募集中", "recruiting"], ["受付終了", "closed"]], {}, class: "form-select" %>
-      </div>
-      <div class="col-md-3 d-flex align-items-end">
-        <%= f.submit "検索", class: "btn btn-primary w-100" %>
-      </div>
-    <% end %>
-  </div>
+  <%= render "search_form" %>
+
   <!-- ✅ ポジション切替（タイトル + ボタンを横並び） -->
   <% if user_signed_in? %>
     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -72,95 +47,45 @@
   <% end %>
 
   <!-- ✅ 表示切り替えボタン -->
-  <div class="d-flex justify-content-end mb-3" data-controller="toggle-view">
-    <button data-action="click->toggle-view#switchView" data-toggle-view-target="toggleButton" class="btn btn-outline-primary">
+  <div class="d-flex justify-content-end mb-3">
+    <button id="toggle-view-btn" class="btn btn-outline-primary">
       テーブル形式で表示
     </button>
   </div>
 
-  <!-- ✅ 表示切り替え対象のコンテナ -->
-  <div>
-    <!-- ✅ カード形式の表示（デフォルト） -->
-    <div id="card-view" data-toggle-view-target="cardView" class="container card-view">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-        <% @job_posts.each do |job| %>
-          <div class="col">
-            <%= link_to job_post_path(job), class: "text-decoration-none" do %>
-              <div class="card shadow-sm h-100 position-relative">
-                <!-- ✅ 受付終了バンド -->
-                <% if job.work_status == "closed" %>
-                  <div class="position-absolute top-50 start-50 translate-middle bg-dark text-white py-2 px-4 fw-bold" style="opacity: 0.8; font-size: 2rem;">
-                    受付終了
-                  </div>
-                <% end %>
+  <!-- ✅ カード形式（デフォルト） -->
+  <%= render "card_view", job_posts: @job_posts %>
 
-                <!-- ✅ 画像のトリミング -->
-                <% if job.main_image.attached? %>
-                  <%= image_tag job.main_image.variant(resize_to_fill: [400, 250]), class: "card-img-top img-fluid", alt: "工事現場画像", style: "height: 250px; object-fit: cover;" %>
-                <% else %>
-                  <%= image_tag "noimage.png", class: "card-img-top img-fluid", alt: "画像なし", style: "height: 250px; object-fit: cover;" %>
-                <% end %>
-
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title text-truncate text-dark" style="max-height: 3em;">
-                    <%= truncate(job.work_title, length: 40, omission: "…") %>
-                  </h5>
-
-                  <div class="mt-auto text-secondary">
-                    <p class="mb-1"><i class="bi bi-geo-alt"></i> <%= job.work_location %></p>
-                    <p class="mb-1"><i class="bi bi-calendar"></i> <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></p>
-                    <p class="mb-1 text-danger"><i class="bi bi-cash"></i> ¥ <%= number_to_currency(job.work_payment, unit: "", precision: 0) %></p>
-                    <p class="mb-1">
-                      <% if job.work_status == "recruiting" %>
-                        <span class="badge bg-success">募集中</span>
-                      <% else %>
-                        <br>
-                      <% end %>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <!-- ✅ テーブル形式の表示（デフォルトは非表示） -->
-    <div id="table-view" data-toggle-view-target="tableView" hidden>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>場所</th>
-            <th>作業件名</th>
-            <th>作業期間</th>
-            <th>報酬</th>
-            <th>募集状況</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @job_posts.each do |job| %>
-            <tr onclick="window.location.href='<%= job_post_path(job) %>'"
-                style="cursor: pointer;"
-                class="<%= job.work_status == 'closed' ? 'text-muted' : 'text-dark' %>">
-              <td><%= job.work_location %></td>
-              <td><%= truncate(job.work_title, length: 40, omission: '…') %></td>
-              <td>
-                <%= job.work_start_date.strftime('%Y/%m/%d') %><br>
-                〜 <%= job.work_end_date.strftime('%Y/%m/%d') %>
-              </td>
-              <td> <%= number_to_currency(job.work_payment, unit: "¥", precision: 0, format: "%u%n") %></td>
-              <td>
-                <% if job.work_status == "recruiting" %>
-                  <span class="badge bg-success">募集中</span>
-                <% else %>
-                  <span class="badge bg-secondary">受付終了</span>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <!-- ✅ テーブル形式（非表示） -->
+  <%= render "table_view", job_posts: @job_posts %>
 </div>
+
+<!-- ✅ JavaScript（直接埋め込み） -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("✅ 表示切り替えスクリプトがロードされました");
+
+    const toggleBtn = document.getElementById("toggle-view-btn");
+    const cardView = document.getElementById("card-view");
+    const tableView = document.getElementById("table-view");
+
+    if (!toggleBtn || !cardView || !tableView) {
+      console.warn("⚠ 必要な要素が見つかりません");
+      return;
+    }
+
+    toggleBtn.addEventListener("click", function() {
+      if (cardView.hidden) {
+        // カード形式を表示
+        cardView.hidden = false;
+        tableView.hidden = true;
+        toggleBtn.textContent = "テーブル形式で表示";
+      } else {
+        // テーブル形式を表示
+        cardView.hidden = true;
+        tableView.hidden = false;
+        toggleBtn.textContent = "カード形式で表示";
+      }
+    });
+  });
+</script>

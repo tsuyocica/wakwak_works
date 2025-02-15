@@ -8,15 +8,19 @@
 </div>
 
 <script>
-  function hideFlashMessages() {
-    setTimeout(function() {
-      document.querySelectorAll('.flash-message').forEach(function(message) {
-        let bsAlert = new bootstrap.Alert(message);
-        bsAlert.close();
-      });
-    }, 3000); // 3秒後に自動で消える
-  }
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("✅ Flash Message JavaScript Loaded");
 
-  document.addEventListener("turbo:load", hideFlashMessages);
-  document.addEventListener("DOMContentLoaded", hideFlashMessages);
+    setTimeout(() => {
+      document.querySelectorAll('.flash-message').forEach(message => {
+        if (message && typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+          let bsAlert = new bootstrap.Alert(message);
+          bsAlert.close();
+          console.log("✅ Flash Message Closed"); // デバッグ用
+        } else {
+          console.warn("⚠ Bootstrap Alert が適用できませんでした");
+        }
+      });
+    }, 2000); // 2秒後に自動で消える
+  });
 </script>

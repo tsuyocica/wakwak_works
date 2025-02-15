@@ -1,0 +1,36 @@
+<!-- ✅ テーブル形式の表示（デフォルトは非表示） -->
+<div id="table-view" hidden>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>場所</th>
+        <th>作業件名</th>
+        <th>作業期間</th>
+        <th>報酬</th>
+        <th>募集状況</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% job_posts.each do |job| %>
+        <tr onclick="window.location.href='<%= job_post_path(job) %>'"
+            style="cursor: pointer;"
+            class="<%= job.work_status == 'closed' ? 'text-muted' : 'text-dark' %>">
+          <td><%= job.work_location %></td>
+          <td><%= truncate(job.work_title, length: 40, omission: '…') %></td>
+          <td>
+            <%= job.work_start_date.strftime('%Y/%m/%d') %><br>
+            〜 <%= job.work_end_date.strftime('%Y/%m/%d') %>
+          </td>
+          <td> <%= number_to_currency(job.work_payment, unit: "¥", precision: 0, format: "%u%n") %></td>
+          <td>
+            <% if job.work_status == "recruiting" %>
+              <span class="badge bg-success">募集中</span>
+            <% else %>
+              <span class="badge bg-secondary">受付終了</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,24 @@
+<!-- ✅ 検索フォーム -->
+<div class="card p-3 mb-4">
+  <%= search_form_for @q, url: job_posts_path, method: :get, class: "row g-3" do |f| %>
+    <div class="col-md-3">
+      <%= f.label :work_location_cont, "場所", class: "form-label" %>
+      <%= f.search_field :work_location_cont, class: "form-control", placeholder: "例: 東京、大阪" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.label :work_title_cont, "作業内容", class: "form-label" %>
+      <%= f.search_field :work_title_cont, class: "form-control", placeholder: "例: 電気工事" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.label :work_start_date_gteq, "開始日", class: "form-label" %>
+      <%= f.date_field :work_start_date_gteq, class: "form-control" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.label :work_end_date_lteq, "終了日", class: "form-label" %>
+      <%= f.date_field :work_end_date_lteq, class: "form-control" %>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <%= f.submit "検索", class: "btn btn-primary w-100" %>
+    </div>
+  <% end %>
+</div>

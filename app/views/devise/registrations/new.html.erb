@@ -1,99 +1,14 @@
 <div class="container mt-5">
   <div class="card shadow-sm p-4">
-    <!-- 🔹 変更: 見出しを "ユーザー新規登録" にし、デザインを目立たせる -->
+    <!-- ✅ 見出し -->
     <h2 class="mb-4 text-center fw-bold text-uppercase text-secondary" style="font-size: 2rem; letter-spacing: 1px;">
       ユーザー新規登録
     </h2>
 
-    <!-- エラーメッセージの表示 -->
+    <!-- ✅ エラーメッセージ -->
     <%= render "shared/error_messages", object: resource %>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { novalidate: true, multipart: true, data: { controller: "avatar-preview" } }) do |f| %>
-
-      <!-- ✅ アバター画像のアップロード -->
-      <div class="text-center mb-4">
-        <label for="avatar-upload" class="d-block fw-bold">プロフィール画像（任意）</label>
-        <img data-avatar-preview-target="preview"
-             src="<%= asset_path('default_avatar.png') %>"
-             alt="プレビュー"
-             class="rounded-circle border"
-             style="width: 120px; height: 120px; object-fit: cover;">
-        <div class="mt-2">
-          <label for="avatar-upload" class="btn btn-outline-secondary btn-sm">画像を選択</label>
-          <%= f.file_field :avatar, class: "form-control d-none", accept: "image/*", id: "avatar-upload", data: { action: "change->avatar-preview#update" } %>
-        </div>
-      </div>
-
-      <div class="row">
-        <!-- 左側のカラム -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <%= f.label :username, "ユーザー名", class: "form-label fw-bold" %>
-            <%= f.text_field :username, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :full_name, "本名", class: "form-label fw-bold" %>
-            <%= f.text_field :full_name, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :furigana, "ふりがな", class: "form-label fw-bold" %>
-            <%= f.text_field :furigana, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :birth_date, "生年月日", class: "form-label fw-bold" %>
-            <%= f.date_field :birth_date, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :role, "ポジション", class: "form-label fw-bold" %><br>
-            <div class="form-check form-check-inline">
-              <%= f.radio_button :role, "施工管理者", class: "form-check-input", id: "role_manager" %>
-              <%= f.label "role_manager", "施工管理者", class: "form-check-label" %>
-            </div>
-            <div class="form-check form-check-inline">
-              <%= f.radio_button :role, "作業員", class: "form-check-input", id: "role_worker" %>
-              <%= f.label "role_worker", "作業員", class: "form-check-label" %>
-            </div>
-          </div>
-        </div>
-
-        <!-- 右側のカラム -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <%= f.label :experience, "経験・スキル", class: "form-label fw-bold" %>
-            <%= f.text_area :experience, class: "form-control", rows: 4 %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :qualification, "資格", class: "form-label fw-bold" %>
-            <%= f.text_field :qualification, class: "form-control" %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :email, "メールアドレス", class: "form-label fw-bold" %>
-            <%= f.email_field :email, class: "form-control", required: true %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :password, "パスワード", class: "form-label fw-bold" %>
-            <%= f.password_field :password, class: "form-control", required: true, autocomplete: "new-password" %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :password_confirmation, "パスワード確認", class: "form-label fw-bold" %>
-            <%= f.password_field :password_confirmation, class: "form-control", required: true, autocomplete: "new-password" %>
-          </div>
-        </div>
-      </div>
-
-      <!-- ボタン -->
-      <div class="d-flex justify-content-center mt-4">
-        <%= f.submit "登録する", class: "btn btn-success me-3 px-4 py-2" %>
-        <%= link_to "キャンセル", root_path, class: "btn btn-outline-secondary px-4 py-2" %>
-      </div>
-    <% end %>
+    <!-- ✅ 共通フォームを呼び出し -->
+    <%= render "devise/registrations/form", resource: resource, resource_name: resource_name %>
   </div>
 </div>

@@ -1,4 +1,5 @@
-import consumer from "channels/consumer";
+import consumer from "../channels/consumer";
+console.log("✅ message_channel.js が読み込まれました！");
 
 // ✅ 現在のユーザーIDを `body` の `data-user-id` から取得
 const currentUserId = document.body.dataset.userId;
