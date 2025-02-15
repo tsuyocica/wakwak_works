@@ -15,11 +15,6 @@ console.log(
 console.log("✅ チャンネルインデックスが読み込まれました！");
 // ✅ Turbo & Bootstrap の読み込み
 import "@hotwired/turbo-rails";
-<<<<<<< Updated upstream
-import "controllers";
-import "channels"
-=======
 import "./controllers"; // ✅ 修正: 相対パス
 import "bootstrap";
 import "./channels"; // ✅ 修正: 相対パス
->>>>>>> Stashed changes
