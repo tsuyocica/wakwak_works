@@ -51,6 +51,15 @@ input, textarea {
   font-size: 2rem;
 }
 
+.text-hover {
+  transition: color 0.3s ease-in-out; /* スムーズな色変更 */
+}
+
+.text-hover:hover {
+  color: #ff5733 !important; /* ホバー時の色変更 */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* 軽い影をつける */
+}
+
 @media (max-width: 768px) {
   .navbar-brand {
     font-size: 1.6rem;
