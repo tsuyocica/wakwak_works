@@ -1,0 +1,19 @@
+ja:
+  devise:
+    confirmations:
+      confirmed: "メールアドレスが正常に確認されました。"
+      send_instructions: "数分以内にメールアドレスの確認手順を記載したメールが届きます。"
+    failure:
+      already_authenticated: "すでにログインしています。"
+      invalid: "メールアドレスまたはパスワードが正しくありません。"
+      timeout: "セッションが期限切れです。再度ログインしてください。"
+    passwords:
+      updated: "パスワードが正常に変更されました。"
+      send_instructions: "パスワードリセットの手順を記載したメールが送信されました。"
+    registrations:
+      signed_up: "アカウントを作成しました。"
+      updated: "アカウント情報が更新されました。"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      new: "ログイン"

@@ -1,6 +1,11 @@
+---
 ja:
+  devise:
+    sessions:
+      signed_in: ログインに成功しました。
+      signed_out: ログアウトしました。
   job_application:
     status:
-      pending: "未承認"
-      approved: "承認済み"
-      rejected: "却下"
+      approved: 承認済み
+      pending: 未承認
+      rejected: 却下
