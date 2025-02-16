@@ -1,4 +1,4 @@
-import consumer from "../channels/consumer";
+import consumer from "./consumer";
 console.log("✅ message_channel.js が読み込まれました！");
 
 // ✅ 現在のユーザーIDを `body` の `data-user-id` から取得
