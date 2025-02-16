@@ -1,13 +1,78 @@
 <div class="container mt-4">
   <div class="row">
-    <%= render "chats/sidebar" %> <!-- サイドバーを読み込む -->
+    <div class="col-md-12 bg-light p-3 border-end">
+      <h5 class="fw-bold">💬 チャット一覧</h5>
 
-    <!-- 右側のメッセージエリア（indexでは空白） -->
-    <div class="col-md-9 border rounded p-3">
-      <p class="text-secondary text-center fw-bold"
-         style="font-size: 4rem;">
-         チャットしたい相手を選択してください
-      </p>
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>
+              <%= link_to "作業件名", chats_path(sort: "work_title", order: params[:order] == "asc" ? "desc" : "asc"), class: "text-dark text-decoration-none" %>
+              <%= params[:sort] == "work_title" ? (params[:order] == "asc" ? " ▲" : " ▼") : "" %>
+            </th>
+            <th>
+              <%= link_to "投稿者名", chats_path(sort: "username", order: params[:order] == "asc" ? "desc" : "asc"), class: "text-dark text-decoration-none" %>
+              <%= params[:sort] == "username" ? (params[:order] == "asc" ? " ▲" : " ▼") : "" %>
+            </th>
+            <th>
+              <%= link_to "時間", chats_path(sort: "updated_at", order: params[:order] == "asc" ? "desc" : "asc"), class: "text-dark text-decoration-none" %>
+              <%= params[:sort] == "updated_at" ? (params[:order] == "asc" ? " ▲" : " ▼") : "" %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @chat_list.present? %>
+            <% @chat_list.each do |chat| %>
+              <% if current_user.role.include?("施工管理者") %>
+                <% partner = chat.worker %> <!-- 施工管理者は作業員の名前を表示 -->
+                <% chat_label = partner.username %>
+                <% work_title = chat.job_post.work_title %> <!-- 作業件名を取得 -->
+              <% else %>
+                <% partner = chat.owner %> <!-- 作業員は案件名＋施工管理者を表示 -->
+                <% chat_label = "#{chat.job_post.work_title} - #{partner.username}" %>
+                <% work_title = chat.job_post.work_title %> <!-- 作業件名を取得 -->
+              <% end %>
+
+              <% if partner.present? %>
+                <tr class="clickable-row" data-href="<%= chat_path(chat) %>">
+                  <!-- 作業件名 -->
+                  <td class="text-truncate" style="max-width: 200px;"><%= work_title %></td>
+
+                  <!-- 投稿者名（アバター付き） -->
+                  <td class="d-flex align-items-center">
+                    <div class="me-2">
+                      <% if partner.avatar.attached? %>
+                        <%= image_tag partner.avatar.variant(resize: "40x40"), class: "rounded-circle", alt: "Avatar", width: 40, height: 40 %>
+                      <% else %>
+                        <i class="bi bi-person-circle" style="font-size: 40px;"></i> <!-- デフォルトアイコン -->
+                      <% end %>
+                    </div>
+                    <div class="text-truncate"><%= chat_label %></div>
+                  </td>
+
+                  <!-- 投稿日時 -->
+                  <td><span class="badge bg-secondary"><%= time_ago_in_words(chat.updated_at) %>前</span></td>
+                </tr>
+              <% end %>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="3" class="text-center text-muted">チャットがありません</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
+
+<!-- ✅ 行をクリックするとチャットの `show` に遷移するスクリプト -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".clickable-row").forEach(row => {
+      row.addEventListener("click", function() {
+        window.location.href = this.dataset.href;
+      });
+    });
+  });
+</script>

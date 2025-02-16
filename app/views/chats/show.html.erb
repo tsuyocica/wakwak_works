@@ -1,4 +1,4 @@
-<div class="container-fluid chat-container d-flex flex-column mt-4">
+<div class="container chat-container d-flex flex-column mt-4" style="max-width: 960px;">
   <div class="card shadow-sm p-4 d-flex flex-column flex-grow-1">
     <!-- ✅ チャットのタイトル -->
     <div class="d-flex align-items-center border-bottom pb-2">
@@ -44,3 +44,24 @@
     <% end %>
   </div>
 </div>
+
+<!-- ✅ CSS（スクロールバーの位置調整） -->
+<style>
+  .messages-list {
+    padding-right: 10px; /* ✅ 右側にスペースを確保してスクロールバーを配置 */
+  }
+
+  /* ✅ スクロールバーのスタイル調整 */
+  .messages-list::-webkit-scrollbar {
+    width: 8px; /* スクロールバーの幅 */
+  }
+
+  .messages-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2); /* スクロールバーの色 */
+    border-radius: 4px;
+  }
+
+  .messages-list::-webkit-scrollbar-track {
+    background-color: transparent; /* 背景を透明に */
+  }
+</style>

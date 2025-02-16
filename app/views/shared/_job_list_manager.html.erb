@@ -9,8 +9,7 @@
           <th class="text-nowrap">作業期間</th>
           <th class="text-nowrap">報酬</th>
           <th class="text-nowrap">募集状況</th>
-          <th class="text-nowrap">応募の有無</th>
-          <th class="text-nowrap">チャット一覧</th>
+          <th class="text-nowrap">応募者一覧</th> <!-- ✅ 修正: "チャット一覧" → "応募者一覧" -->
         </tr>
       </thead>
       <tbody>
@@ -41,22 +40,13 @@
               <% end %>
             </td>
 
-            <!-- ✅ 応募の有無 -->
+            <!-- ✅ 応募者一覧 (応募がある場合のみボタンを表示) -->
             <td class="align-middle">
               <% if job.job_applications.any? %>
-                <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span><br>
-                <%= link_to "応募者一覧", applicants_job_post_path(job), class: "text-primary mt-1 text-decoration-none" %>
+                <span class="badge fw-bold text-danger"><%= job.job_applications.count %> 件の応募</span><br>
+                <%= link_to "見る", applicants_job_post_path(job), class: "btn btn-primary btn-sm mt-1" %>
               <% else %>
-                <span class="badge bg-secondary">応募なし</span>
-              <% end %>
-            </td>
-
-            <!-- ✅ チャット一覧 -->
-            <td class="align-middle">
-              <% if job.job_applications.any? %>
-                <%= link_to "一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
-              <% else %>
-                <span class="text-muted">なし</span>
+                <span class="text-muted">応募なし</span>
               <% end %>
             </td>
           </tr>
@@ -85,19 +75,14 @@
             <% end %>
           </p>
           <p class="card-text">
-            <strong>応募の有無:</strong>
+            <strong>応募者一覧:</strong>
             <% if job.job_applications.any? %>
-              <span class="badge bg-danger text-white fw-bold"><%= job.job_applications.count %> 件の応募</span>
-              <%= link_to "応募者一覧", applicants_job_post_path(job), class: "text-primary mt-1 text-decoration-none" %>
+              <span class="fw-bold text-danger"><%= job.job_applications.count %> 件の応募</span><br>
+              <%= link_to "見る", applicants_job_post_path(job), class: "btn btn-primary btn-sm mt-1" %>
             <% else %>
-              <span class="badge bg-secondary">応募なし</span>
+              <span class="text-muted">応募なし</span>
             <% end %>
           </p>
-          <% if job.job_applications.any? %>
-            <%= link_to "チャット一覧", chats_path(job_id: job.id), class: "btn btn-primary btn-sm" %>
-          <% else %>
-            <span class="text-muted">なし</span>
-          <% end %>
         </div>
       </div>
     <% end %>
