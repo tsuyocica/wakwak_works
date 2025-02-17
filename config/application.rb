@@ -2,6 +2,12 @@ require_relative "boot"
 
 require "rails/all"
 
+# dotenv の読み込み（開発環境・テスト環境のみ）
+if %w[development test].include?(ENV["RAILS_ENV"] || "development")
+  require "dotenv"
+  Dotenv.load
+end
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
