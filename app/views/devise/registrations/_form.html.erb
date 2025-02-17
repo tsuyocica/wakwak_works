@@ -17,6 +17,13 @@
   <div class="row">
     <!-- 左側のカラム -->
     <div class="col-md-6">
+      <% unless resource.persisted? %> <!-- ✅ 新規登録時のみ表示 -->
+        <div class="mb-3 form-group">
+          <%= f.label :role, "役割（必須）", class: "form-label fw-bold" %>
+          <%= f.select :role, options_for_select([["施工管理者", "owner"], ["作業員", "worker"]]), {}, class: "form-control", required: true %>
+        </div>
+      <% end %>
+
       <div class="mb-3 form-group">
         <%= f.label :username, "ユーザー名", class: "form-label fw-bold" %>
         <%= f.text_field :username, class: "form-control", required: true %>
@@ -67,20 +74,24 @@
 
   <!-- ✅ 新しいパスワード変更欄 -->
   <div class="mt-4 p-3 border rounded bg-light">
-    <h4 class="text-center">パスワードの変更 <%= resource.persisted? ? "(任意)" : "(必須)" %></h4>
+    <h4 class="text-center">パスワードの設定 <%= resource.persisted? ? "(任意)" : "(必須)" %></h4>
+    <% unless resource.persisted? %>
+      <p class="text-center text-muted">※ 6文字以上のパスワードを設定してください</p>
+    <% else %>
     <p class="text-center text-muted">※ パスワードを変更しない場合は空のままにしてください</p>
+    <% end %>
 
     <div class="row">
       <div class="col-md-6">
         <div class="mb-3 form-group">
-          <%= f.label :password, "新しいパスワード", class: "form-label fw-bold" %>
+          <%= f.label :password, resource.persisted? ? "新しいパスワード" : "パスワード", class: "form-label fw-bold" %>
           <%= f.password_field :password, class: "form-control", autocomplete: "new-password", required: !resource.persisted? %>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="mb-3 form-group">
-          <%= f.label :password_confirmation, "新しいパスワード確認", class: "form-label fw-bold" %>
+          <%= f.label :password_confirmation, resource.persisted? ? "新しいパスワード確認" : "パスワード確認", class: "form-label fw-bold" %>
           <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", required: !resource.persisted? %>
         </div>
       </div>
@@ -97,7 +108,7 @@
 
 <!-- ✅ JavaScript を直接埋め込む（アバター画像プレビュー） -->
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("turbo:load", () => {
     console.log("✅ JavaScript がロードされました");
 
     const avatarInput = document.getElementById("avatar-upload");
