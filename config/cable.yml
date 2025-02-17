@@ -2,8 +2,6 @@ development:
   adapter: redis
   url: <%= ENV.fetch("REDIS_URL") %>
   channel_prefix: wakwak_works_development
-  ssl_params:
-    verify_mode: OpenSSL::SSL::VERIFY_NONE
 
 test:
   adapter: test
