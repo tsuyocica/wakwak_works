@@ -8,18 +8,15 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("turbo:load", function() {
     console.log("✅ Flash Message JavaScript Loaded");
 
     setTimeout(() => {
       document.querySelectorAll('.flash-message').forEach(message => {
-        if (message && typeof bootstrap !== 'undefined' && bootstrap.Alert) {
-          let bsAlert = new bootstrap.Alert(message);
-          bsAlert.close();
-          console.log("✅ Flash Message Closed"); // デバッグ用
-        } else {
-          console.warn("⚠ Bootstrap Alert が適用できませんでした");
-        }
+        console.log("🎯 Flash Message Found:", message);
+        let bsAlert = bootstrap.Alert.getOrCreateInstance(message);
+        bsAlert.close();
+        console.log("✅ Flash Message Closed");
       });
     }, 2000); // 2秒後に自動で消える
   });
