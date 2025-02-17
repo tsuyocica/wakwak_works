@@ -13,10 +13,8 @@
 
     setTimeout(() => {
       document.querySelectorAll('.flash-message').forEach(message => {
-        console.log("🎯 Flash Message Found:", message);
         let bsAlert = bootstrap.Alert.getOrCreateInstance(message);
         bsAlert.close();
-        console.log("✅ Flash Message Closed");
       });
     }, 2000); // 2秒後に自動で消える
   });

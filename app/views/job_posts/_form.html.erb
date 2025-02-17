@@ -6,11 +6,14 @@
         <%= f.label :main_image, "メイン画像", class: "form-label fw-bold" %>
         <%= f.file_field :main_image, class: "form-control d-none", accept: "image/*", id: "main-image-input" %>
 
+        <!-- ✅ 画像削除フラグ（サーバーに送信） -->
+        <%= f.hidden_field :remove_main_image, id: "remove-main-image-flag", value: "false" %>
+
         <div id="main-image-preview" class="border p-3 d-flex align-items-center justify-content-center position-relative">
           <% if @job_post.persisted? && @job_post.main_image.attached? %>
-            <img src="<%= url_for(@job_post.main_image) %>" class="img-thumbnail w-100 h-100 object-fit-cover" id="main-preview">
+            <%= image_tag url_for(@job_post.main_image), class: "img-thumbnail w-100 h-100 object-fit-cover", id: "main-preview" %>
           <% else %>
-            <img src="<%= asset_path('noimage.png') %>" class="img-thumbnail w-100 h-100 object-fit-cover" id="main-preview">
+            <%= image_tag asset_path('noimage.png'), class: "img-thumbnail w-100 h-100 object-fit-cover", id: "main-preview" %>
           <% end %>
 
           <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0" id="remove-main-image">×</button>
@@ -77,11 +80,11 @@
   <!-- ✅ ボタン -->
   <div class="d-flex justify-content-center mt-4">
     <%= f.submit "登録", class: "btn btn-primary px-4 py-2 me-3" %>
-    <%= link_to "戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2" %>
+    <%= link_to "戻る", @job_post.persisted? ? job_post_path(@job_post) : job_posts_path, class: "btn btn-outline-secondary px-4 py-2" %>
   </div>
 <% end %>
 
-<!-- ✅ ここから JavaScript -->
+<!-- ✅ JavaScript -->
 <script>
   document.addEventListener("turbo:load", () => {
     console.log("✅ JavaScript がロードされました");
@@ -89,14 +92,20 @@
     const mainImageInput = document.getElementById("main-image-input");
     const mainPreview = document.getElementById("main-preview");
     const removeMainImageButton = document.getElementById("remove-main-image");
+    const removeMainImageFlag = document.getElementById("remove-main-image-flag");
 
-    if (!mainImageInput || !mainPreview || !removeMainImageButton) {
+    if (!mainImageInput || !mainPreview || !removeMainImageButton || !removeMainImageFlag) {
       console.warn("⚠ 必要な要素が見つかりません");
       return;
     }
 
+  // ✅ 既存のイベントリスナーを削除
+  mainImageInput.removeEventListener("change", handleMainImageChange);
+  removeMainImageButton.removeEventListener("click", handleRemoveMainImage);
+  mainPreview.removeEventListener("click", handleMainPreviewClick);
+
     // ✅ 画像が選択されたときの処理
-    mainImageInput.addEventListener("change", (event) => {
+  function handleMainImageChange(event) {
       console.log("✅ メイン画像が選択されました");
 
       if (!event.target.files.length) {
@@ -120,21 +129,28 @@
       const reader = new FileReader();
       reader.onload = (e) => {
         mainPreview.src = e.target.result;
+        removeMainImageFlag.value = "false"; // 画像を選択したら削除フラグをオフ
       };
       reader.readAsDataURL(file);
-    });
+  }
 
     // ✅ 削除ボタンが押されたときの処理
-    removeMainImageButton.addEventListener("click", () => {
+  function handleRemoveMainImage() {
       console.log("✅ メイン画像を削除しました");
-      mainPreview.src = "<%= asset_path('noimage.png') %>"; // デフォルト画像に変更
+    mainPreview.src = "/assets/noimage.png"; // デフォルト画像に変更
       mainImageInput.value = ""; // 選択したファイルをリセット
-    });
+      removeMainImageFlag.value = "true"; // 画像削除フラグをオン
+  }
 
     // ✅ 画像プレビューをクリックで `input[type="file"]` を開く
-    mainPreview.addEventListener("click", () => {
+  function handleMainPreviewClick() {
       console.log("✅ メイン画像をクリックしました（ファイル選択を開く）");
       mainImageInput.click();
-    });
+  }
+
+  // ✅ 新しいイベントリスナーを追加
+  mainImageInput.addEventListener("change", handleMainImageChange);
+  removeMainImageButton.addEventListener("click", handleRemoveMainImage);
+  mainPreview.addEventListener("click", handleMainPreviewClick);
   });
 </script>

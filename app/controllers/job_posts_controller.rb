@@ -35,6 +35,12 @@ class JobPostsController < ApplicationController
 
   # ✅ 案件更新処理
   def update
+    # **削除フラグがONの場合、画像を削除**
+    if params[:job_post][:remove_main_image] == "true"
+      @job_post.main_image.purge if @job_post.main_image.attached?
+    end
+
+    # **データ更新**
     if @job_post.update(job_post_params)
       redirect_to @job_post, notice: "案件を更新しました！"
     else

@@ -2,6 +2,11 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :basic_auth
 
+  # ✅ ログイン後のリダイレクト先を指定
+  def after_sign_in_path_for(resource)
+    job_posts_path
+  end
+
   private
 
   # Deviseのストロングパラメータ設定

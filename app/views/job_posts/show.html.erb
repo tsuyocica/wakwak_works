@@ -5,14 +5,22 @@
       <%= @job_post.work_title %>
     </h1>
 
-    <!-- ✅ メイン画像 -->
-    <div class="text-center mb-4">
-      <% if @job_post.main_image.attached? %>
-        <%= image_tag @job_post.main_image.variant(resize_to_limit: [800, 500]), class: "img-fluid rounded shadow", alt: "メイン画像" %>
-      <% else %>
-        <%= image_tag "noimage.png", class: "img-fluid rounded shadow", alt: "No Image", width: 800, height: 500 %>
-      <% end %>
+<!-- ✅ メイン画像 -->
+<div class="position-relative text-center mb-4">
+  <% if @job_post.main_image.attached? %>
+    <%= image_tag @job_post.main_image.variant(resize_to_limit: [800, 500]), class: "img-fluid rounded shadow", alt: "メイン画像" %>
+  <% else %>
+    <%= image_tag "noimage.png", class: "img-fluid rounded shadow", alt: "No Image", width: 800, height: 500 %>
+  <% end %>
+
+  <!-- ✅ 受付終了バンド -->
+  <% if @job_post.work_status == "closed" %>
+    <div class="position-absolute top-50 start-50 translate-middle bg-dark text-white py-2 px-4 fw-bold"
+          style="opacity: 0.8; font-size: 2rem;">
+      受付終了
     </div>
+  <% end %>
+</div>
 
     <div class="row">
       <!-- ✅ 左カラム（案件詳細） -->
