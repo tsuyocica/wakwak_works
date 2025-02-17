@@ -79,3 +79,4 @@ gem "rails-i18n", "~> 7.0"
 gem 'redis'
 
 gem "importmap-rails", "~> 2.1"
+gem 'dotenv-rails', groups: [:development, :test]
