@@ -1,40 +1,50 @@
 <!-- ✅ プロフィール情報 -->
 <%= render "shared/profile", user: @user %>
 
-<!-- ✅ 本人のみ、案件一覧やボタンを表示 -->
-<% if current_user == @user %>
-  <div class="mt-4">
-    <!-- ✅ 役割切り替えボタン & 案件投稿ボタン -->
-    <div class="d-flex flex-wrap align-items-center gap-3">
-      <!-- ✅ ポジション切替（タイトル + ボタンを横並び） -->
-      <div class="d-flex align-items-center">
-        <h5 class="fw-bold me-3 mb-0">ポジション切替</h5>
-        <div class="btn-group">
-          <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
-              class: "btn btn-sm #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
-              disabled: current_user.role == '施工管理者' %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <% if current_user == @user %>
+    <!-- ✅ 本人のみ役割切り替えボタンを表示 -->
+    <div class="d-flex align-items-center gap-3">
+      <h5 class="fw-bold mb-0">ポジション切替</h5>
+      <div class="btn-group">
+        <%= button_to "施工管理者", switch_role_users_path(role: "施工管理者"), method: :patch,
+            class: "btn btn-sm #{current_user.role == '施工管理者' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+            disabled: current_user.role == '施工管理者' %>
 
-          <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
-              class: "btn btn-sm #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
-              disabled: current_user.role == '作業員' %>
-        </div>
+        <%= button_to "作業員", switch_role_users_path(role: "作業員"), method: :patch,
+            class: "btn btn-sm #{current_user.role == '作業員' ? 'btn-primary' : 'btn-outline-secondary'} w-150",
+            disabled: current_user.role == '作業員' %>
       </div>
-
-      <!-- ✅ 案件を登録するボタン（施工管理者のみ） -->
-      <% if @user.role.include?("施工管理者") %>
-        <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-primary px-4 py-2 shadow-sm" %>
-      <% end %>
     </div>
+  <% end %>
 
-    <% if @user.role.include?("施工管理者") %>
-      <!-- ✅ 投稿した案件一覧 -->
-      <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📝 投稿した案件一覧</h3>
-      <%= render "shared/job_list_manager", title: "投稿した案件一覧", job_lists: @job_posts %>
-
-    <% else %>
-      <!-- ✅ 応募した案件一覧 -->
-      <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📌 応募した案件一覧</h3>
-      <%= render "shared/job_list", title: "応募した案件一覧", job_lists: @job_applications.map(&:job_post) %>
+  <div class="d-flex align-items-center gap-3">
+    <% if current_user == @user && @user.role.include?("施工管理者") %>
+      <!-- ✅ 本人かつ施工管理者のみ「案件を投稿する」ボタンを表示 -->
+      <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-primary px-4 py-2 shadow-sm" %>
     <% end %>
+
+    <!-- ✅ 「一覧に戻る」ボタン（全ユーザー共通で右端に表示） -->
+    <%= link_to "一覧に戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2 shadow-sm" %>
   </div>
+</div>
+
+
+<!-- ✅ 案件一覧の表示 -->
+<% if current_user == @user %>
+  <% if @user.role.include?("施工管理者") %>
+    <!-- ✅ 施工管理者本人の場合（投稿した案件一覧を表示） -->
+    <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📝 投稿した案件一覧</h3>
+    <%= render "shared/job_list_manager", title: "投稿した案件一覧", job_lists: @job_posts %>
+  <% else %>
+    <!-- ✅ 作業員本人の場合（応募した案件一覧を表示） -->
+    <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📌 応募した案件一覧</h3>
+    <%= render "shared/job_list", title: "応募した案件一覧", job_lists: @job_applications.map(&:job_post) %>
+  <% end %>
+<% else %>
+  <% if @user.role.include?("施工管理者") %>
+    <!-- ✅ 他人のページで施工管理者なら「投稿した案件一覧」を表示 -->
+    <h3 class="fw-bold fs-4 text-center bg-light p-2 rounded shadow-sm mt-4">📝 投稿した案件一覧</h3>
+    <%= render "shared/job_list_manager", title: "投稿した案件一覧", job_lists: @job_posts %>
+  <% end %>
 <% end %>
