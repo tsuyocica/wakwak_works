@@ -41,7 +41,7 @@
 
       <!-- ✅ 施工管理者のみ「案件を投稿する」ボタンを表示 -->
       <% if current_user.role == "施工管理者" %>
-        <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-info d-flex align-items-center justify-content-start mb-3" %>
+        <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-info d-flex align-items-center justify-content-start " %>
       <% end %>
     </div>
   <% end %>
