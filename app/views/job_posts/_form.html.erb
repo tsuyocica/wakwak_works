@@ -99,58 +99,58 @@
       return;
     }
 
-  // ✅ 既存のイベントリスナーを削除
-  mainImageInput.removeEventListener("change", handleMainImageChange);
-  removeMainImageButton.removeEventListener("click", handleRemoveMainImage);
-  mainPreview.removeEventListener("click", handleMainPreviewClick);
+    // ✅ 既存のイベントリスナーを全て削除
+    mainImageInput.replaceWith(mainImageInput.cloneNode(true));
+    removeMainImageButton.replaceWith(removeMainImageButton.cloneNode(true));
+    mainPreview.replaceWith(mainPreview.cloneNode(true));
 
-    // ✅ 画像が選択されたときの処理
-  function handleMainImageChange(event) {
-      console.log("✅ メイン画像が選択されました");
+    // ✅ クローンされた要素を取得（新しいイベントリスナーを追加するため）
+    const newMainImageInput = document.getElementById("main-image-input");
+    const newMainPreview = document.getElementById("main-preview");
+    const newRemoveMainImageButton = document.getElementById("remove-main-image");
 
-      if (!event.target.files.length) {
-        console.warn("⚠ ファイルが選択されていません");
-        return;
-      }
+      // ✅ 画像が選択されたときの処理
+    newMainImageInput.addEventListener("change", (event) => {
+        console.log("✅ メイン画像が選択されました");
 
-      const file = event.target.files[0];
+        if (!event.target.files.length) {
+          console.warn("⚠ ファイルが選択されていません");
+          return;
+        }
 
-      if (!file.type.startsWith("image/")) {
-        console.error("❌ 選択されたファイルは画像ではありません");
-        return;
-      }
+        const file = event.target.files[0];
 
-      if (file.size > 5 * 1024 * 1024) {
-        alert("画像は5MB以下のファイルを選択してください");
-        event.target.value = "";
-        return;
-      }
+        if (!file.type.startsWith("image/")) {
+          console.error("❌ 選択されたファイルは画像ではありません");
+          return;
+        }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        mainPreview.src = e.target.result;
-        removeMainImageFlag.value = "false"; // 画像を選択したら削除フラグをオフ
-      };
-      reader.readAsDataURL(file);
-  }
+        if (file.size > 5 * 1024 * 1024) {
+          alert("画像は5MB以下のファイルを選択してください");
+          event.target.value = "";
+          return;
+        }
 
-    // ✅ 削除ボタンが押されたときの処理
-  function handleRemoveMainImage() {
-      console.log("✅ メイン画像を削除しました");
-    mainPreview.src = "/assets/noimage.png"; // デフォルト画像に変更
-      mainImageInput.value = ""; // 選択したファイルをリセット
-      removeMainImageFlag.value = "true"; // 画像削除フラグをオン
-  }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+        newMainPreview.src = e.target.result;
+          removeMainImageFlag.value = "false"; // 画像を選択したら削除フラグをオフ
+        };
+        reader.readAsDataURL(file);
+    });
 
-    // ✅ 画像プレビューをクリックで `input[type="file"]` を開く
-  function handleMainPreviewClick() {
-      console.log("✅ メイン画像をクリックしました（ファイル選択を開く）");
-      mainImageInput.click();
-  }
+      // ✅ 削除ボタンが押されたときの処理
+    newRemoveMainImageButton.addEventListener("click", () => {
+        console.log("✅ メイン画像を削除しました");
+      newMainPreview.src = "/assets/noimage.png"; // デフォルト画像に変更
+      newMainImageInput.value = ""; // 選択したファイルをリセット
+        removeMainImageFlag.value = "true"; // 画像削除フラグをオン
+    });
 
-  // ✅ 新しいイベントリスナーを追加
-  mainImageInput.addEventListener("change", handleMainImageChange);
-  removeMainImageButton.addEventListener("click", handleRemoveMainImage);
-  mainPreview.addEventListener("click", handleMainPreviewClick);
+      // ✅ 画像プレビューをクリックで `input[type="file"]` を開く
+    newMainPreview.addEventListener("click", () => {
+        console.log("✅ メイン画像をクリックしました（ファイル選択を開く）");
+      newMainImageInput.click();
+    });
   });
 </script>
