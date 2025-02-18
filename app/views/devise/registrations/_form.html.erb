@@ -19,8 +19,17 @@
     <div class="col-md-6">
       <% unless resource.persisted? %> <!-- ✅ 新規登録時のみ表示 -->
         <div class="mb-3 form-group">
-          <%= f.label :role, "役割（必須）", class: "form-label fw-bold" %>
-          <%= f.select :role, options_for_select([["施工管理者", "owner"], ["作業員", "worker"]]), {}, class: "form-control", required: true %>
+          <%= f.label :role, "役割（必須）", class: "form-label fw-bold d-block" %>
+
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :role, "施工管理者", id: "role_owner", class: "form-check-input", required: true %>
+            <%= f.label :role_owner, "施工管理者", class: "form-check-label" %>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :role, "作業員", id: "role_worker", class: "form-check-input", required: true %>
+            <%= f.label :role_worker, "作業員", class: "form-check-label" %>
+          </div>
         </div>
       <% end %>
 
