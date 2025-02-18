@@ -41,7 +41,7 @@
 
       <!-- ✅ 施工管理者のみ「案件を投稿する」ボタンを表示 -->
       <% if current_user.role == "施工管理者" %>
-        <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-info d-flex align-items-center justify-content-start " %>
+        <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-info d-flex align-items-center justify-content-start mb-3" %>
       <% end %>
     </div>
   <% end %>
@@ -63,7 +63,6 @@
 <!-- ✅ JavaScript（直接埋め込み） -->
 <script>
   document.addEventListener("turbo:load", function() {
-    console.log("✅ 表示切り替えスクリプトがロードされました");
 
     const toggleBtn = document.getElementById("toggle-view-btn");
     const cardView = document.getElementById("card-view");

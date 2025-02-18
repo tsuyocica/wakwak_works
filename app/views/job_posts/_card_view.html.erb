@@ -21,13 +21,23 @@
             <% end %>
 
             <div class="card-body d-flex flex-column">
+
+              <!-- ✅ 案件タイトル -->
               <h5 class="card-title text-truncate text-dark" style="max-height: 3em;">
                 <%= truncate(job.work_title, length: 40, omission: "…") %>
               </h5>
               <div class="mt-auto text-secondary">
+
+                <!-- ✅ 案件情報 -->
                 <p class="mb-1"><i class="bi bi-geo-alt"></i> <%= job.work_location %></p>
+
+                <!-- ✅ 期間 -->
                 <p class="mb-1"><i class="bi bi-calendar"></i> <%= job.work_start_date.strftime('%Y/%m/%d') %> 〜 <%= job.work_end_date.strftime('%Y/%m/%d') %></p>
+
+                <!-- ✅ 報酬 -->
                 <p class="mb-1 text-danger"><i class="bi bi-cash"></i> ¥ <%= number_to_currency(job.work_payment, unit: "", precision: 0) %></p>
+
+                <!-- ✅ 募集状況 -->
                 <p class="mb-1">
                   <% if job.work_status == "recruiting" %>
                     <span class="badge bg-success">募集中</span>

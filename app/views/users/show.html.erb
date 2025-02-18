@@ -21,7 +21,7 @@
   <div class="d-flex align-items-center gap-3">
     <% if current_user == @user && @user.role.include?("施工管理者") %>
       <!-- ✅ 本人かつ施工管理者のみ「案件を投稿する」ボタンを表示 -->
-      <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-primary px-4 py-2 shadow-sm" %>
+      <%= link_to "案件を投稿する", new_job_post_path, class: "btn btn-info px-4 py-2 shadow-sm" %>
     <% end %>
 
     <!-- ✅ 「一覧に戻る」ボタン（全ユーザー共通で右端に表示） -->

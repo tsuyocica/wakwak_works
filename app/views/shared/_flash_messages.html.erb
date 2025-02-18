@@ -9,12 +9,21 @@
 
 <script>
   document.addEventListener("turbo:load", function() {
-    console.log("✅ Flash Message JavaScript Loaded");
-
     setTimeout(() => {
       document.querySelectorAll('.flash-message').forEach(message => {
-        let bsAlert = bootstrap.Alert.getOrCreateInstance(message);
-        bsAlert.close();
+        if (!message.classList.contains("closing")) { // 多重実行防止
+          message.classList.add("closing");
+
+          let bsAlert = bootstrap.Alert.getOrCreateInstance(message);
+          bsAlert.close();
+
+          // Bootstrap の `close()` だけでは `display: none` になるだけなので削除
+          setTimeout(() => {
+            if (message.parentNode) {
+              message.remove();
+            }
+          }, 500); // 0.5秒後に完全削除
+        }
       });
     }, 2000); // 2秒後に自動で消える
   });
