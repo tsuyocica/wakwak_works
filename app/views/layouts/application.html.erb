@@ -14,12 +14,17 @@
   </head>
 
   <body data-user-id="<%= current_user&.id %>">
+
     <!-- ヘッダーを読み込む -->
     <%= render "shared/header" %>
     <%= render "shared/flash_messages" %>
 
+    <!-- メインコンテンツ -->
     <div class="container mt-4">
       <%= yield %>
     </div>
+
+    <!-- フッターを読み込む -->
+    <%= render "shared/footer" %>
   </body>
 </html>
