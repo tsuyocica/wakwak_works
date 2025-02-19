@@ -8,9 +8,9 @@
 <!-- ✅ メイン画像 -->
 <div class="position-relative text-center mb-4">
   <% if @job_post.main_image.attached? %>
-    <%= image_tag @job_post.main_image.variant(resize_to_limit: [800, 500]), class: "img-fluid rounded shadow", alt: "メイン画像" %>
+    <%= image_tag @job_post.main_image.variant(resize_to_limit: [540, 405]), class: "img-fluid rounded shadow", alt: "メイン画像" %>
   <% else %>
-    <%= image_tag "noimage.png", class: "img-fluid rounded shadow", alt: "No Image", width: 800, height: 500 %>
+    <%= image_tag "noimage.png", class: "img-fluid rounded shadow", alt: "No Image", width: 540, height: 405 %>
   <% end %>
 
   <!-- ✅ 受付終了バンド -->
@@ -94,12 +94,12 @@
 
     <!-- ✅ 戻るボタンと役割に応じたボタン -->
     <div class="d-flex justify-content-center mt-4">
-      <%= link_to "一覧に戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2 shadow-sm me-2" %>
+      <%= link_to "トップに戻る", job_posts_path, class: "btn btn-outline-secondary px-4 py-2 shadow-sm me-2" %>
 
       <% if current_user.role == "施工管理者" %>
-        <%= link_to "投稿した案件を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
+        <%= link_to "投稿一覧を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
       <% else %>
-        <%= link_to "応募した案件を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
+        <%= link_to "応募一覧を見る", user_path(current_user), class: "btn btn-primary px-4 py-2 shadow-sm" %>
       <% end %>
     </div>
   </div>
