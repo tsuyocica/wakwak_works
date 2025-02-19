@@ -13,18 +13,19 @@
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap" rel="stylesheet">
   </head>
 
-  <body data-user-id="<%= current_user&.id %>">
+  <body data-user-id="<%= current_user&.id %>" class="d-flex flex-column vh-100">
 
     <!-- ヘッダーを読み込む -->
     <%= render "shared/header" %>
     <%= render "shared/flash_messages" %>
 
     <!-- メインコンテンツ -->
-    <div class="container mt-4">
+    <div class="container mt-4 mb-auto">
       <%= yield %>
     </div>
+
     <!-- ✅ 余白を埋める要素 -->
-    <div class="box"><br><br><br></div>
+    <div class="box my-4"><br></div>
 
     <!-- フッターを読み込む -->
     <%= render "shared/footer" %>
