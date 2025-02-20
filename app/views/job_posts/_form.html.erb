@@ -86,31 +86,32 @@
 
 <!-- ✅ JavaScript -->
 <script>
-  document.addEventListener("turbo:load", () => {
-    console.log("✅ JavaScript がロードされました");
+  (function() {
+    const setupImagePreview = () => {
+      console.log("✅ JavaScript がロードされました");
 
-    const mainImageInput = document.getElementById("main-image-input");
-    const mainPreview = document.getElementById("main-preview");
-    const removeMainImageButton = document.getElementById("remove-main-image");
-    const removeMainImageFlag = document.getElementById("remove-main-image-flag");
+      const mainImageInput = document.getElementById("main-image-input");
+      const mainPreview = document.getElementById("main-preview");
+      const removeMainImageButton = document.getElementById("remove-main-image");
+      const removeMainImageFlag = document.getElementById("remove-main-image-flag");
 
-    if (!mainImageInput || !mainPreview || !removeMainImageButton || !removeMainImageFlag) {
-      console.warn("⚠ 必要な要素が見つかりません");
-      return;
-    }
+      if (!mainImageInput || !mainPreview || !removeMainImageButton || !removeMainImageFlag) {
+        console.warn("⚠ 必要な要素が見つかりません");
+        return;
+      }
 
-    // ✅ 既存のイベントリスナーを全て削除
-    mainImageInput.replaceWith(mainImageInput.cloneNode(true));
-    removeMainImageButton.replaceWith(removeMainImageButton.cloneNode(true));
-    mainPreview.replaceWith(mainPreview.cloneNode(true));
+      // 既存のイベントリスナーを全て削除
+      mainImageInput.replaceWith(mainImageInput.cloneNode(true));
+      removeMainImageButton.replaceWith(removeMainImageButton.cloneNode(true));
+      mainPreview.replaceWith(mainPreview.cloneNode(true));
 
-    // ✅ クローンされた要素を取得（新しいイベントリスナーを追加するため）
-    const newMainImageInput = document.getElementById("main-image-input");
-    const newMainPreview = document.getElementById("main-preview");
-    const newRemoveMainImageButton = document.getElementById("remove-main-image");
+      // クローンされた要素を取得（新しいイベントリスナーを追加するため）
+      const newMainImageInput = document.getElementById("main-image-input");
+      const newMainPreview = document.getElementById("main-preview");
+      const newRemoveMainImageButton = document.getElementById("remove-main-image");
 
-      // ✅ 画像が選択されたときの処理
-    newMainImageInput.addEventListener("change", (event) => {
+      // 画像が選択されたときの処理
+      newMainImageInput.addEventListener("change", (event) => {
         console.log("✅ メイン画像が選択されました");
 
         if (!event.target.files.length) {
@@ -133,24 +134,28 @@
 
         const reader = new FileReader();
         reader.onload = (e) => {
-        newMainPreview.src = e.target.result;
+          newMainPreview.src = e.target.result;
           removeMainImageFlag.value = "false"; // 画像を選択したら削除フラグをオフ
         };
         reader.readAsDataURL(file);
-    });
+      });
 
-      // ✅ 削除ボタンが押されたときの処理
-    newRemoveMainImageButton.addEventListener("click", () => {
+      // 削除ボタンが押されたときの処理
+      newRemoveMainImageButton.addEventListener("click", () => {
         console.log("✅ メイン画像を削除しました");
-      newMainPreview.src = "/assets/noimage.png"; // デフォルト画像に変更
-      newMainImageInput.value = ""; // 選択したファイルをリセット
+        newMainPreview.src = "/assets/noimage.png"; // デフォルト画像に変更
+        newMainImageInput.value = ""; // 選択したファイルをリセット
         removeMainImageFlag.value = "true"; // 画像削除フラグをオン
-    });
+      });
 
-      // ✅ 画像プレビューをクリックで `input[type="file"]` を開く
-    newMainPreview.addEventListener("click", () => {
+      // 画像プレビューをクリックで `input[type="file"]` を開く
+      newMainPreview.addEventListener("click", () => {
         console.log("✅ メイン画像をクリックしました（ファイル選択を開く）");
-      newMainImageInput.click();
-    });
-  });
+        newMainImageInput.click();
+      });
+    };
+
+    document.addEventListener("turbo:load", setupImagePreview);
+    document.addEventListener("turbo:render", setupImagePreview);
+  })();
 </script>
