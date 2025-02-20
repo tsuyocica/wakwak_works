@@ -51,6 +51,8 @@ class JobPost < ApplicationRecord
 
   # ✅ Google Maps API で緯度経度を取得（バリデーション前に実行）
   def set_geocode
+    return if latitude.present? && longitude.present? # 既に緯度経度がある場合はスキップ
+
     results = Geocoder.search(work_location)
     if results.present?
       self.latitude = results.first.coordinates[0]
