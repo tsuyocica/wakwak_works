@@ -69,8 +69,9 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Google Maps API Key環境変数が設定されているか確認
-  Rails.logger.info "Google Maps API Key: #{ENV['GOOGLE_MAPS_API_KEY'].present? ? 'LOADED' : 'NOT LOADED'}"
-  Rails.logger.info "Google Maps ID: #{ENV['GOOGLE_MAPS_ID'].present? ? 'LOADED' : 'NOT LOADED'}"
+  if Rails.application.config.respond_to?(:logger) && Rails.logger
+    Rails.logger.info "Google Maps API Key: #{ENV['GOOGLE_MAPS_API_KEY'].present? ? 'LOADED' : 'NOT LOADED'}"
+  end
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
