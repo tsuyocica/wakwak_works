@@ -14,6 +14,7 @@ Bundler.require(*Rails.groups)
 
 module WakwakWorks
   class Application < Rails::Application
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
@@ -33,5 +34,9 @@ module WakwakWorks
 
     # config/application.rb
     config.active_storage.variant_processor = :mini_magick
+
+    # ✅ Google Maps API の環境変数を Rails に読み込む
+    config.google_maps_api_key = ENV['GOOGLE_MAPS_API_KEY']
+    config.google_maps_id = ENV['GOOGLE_MAPS_ID']
   end
 end
