@@ -67,6 +67,9 @@ Rails.application.configure do
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
+  # Google Maps API Key環境変数が設定されているか確認
+  Rails.logger.info "Google Maps API Key: #{ENV['GOOGLE_MAPS_API_KEY'].present? ? 'LOADED' : 'NOT LOADED'}"
+
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
