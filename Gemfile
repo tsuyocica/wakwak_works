@@ -81,3 +81,4 @@ gem 'redis'
 gem "importmap-rails", "~> 2.1"
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'aws-sdk-s3', require: false
+gem "geocoder", "~> 1.8"

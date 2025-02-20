@@ -62,29 +62,26 @@
 
 <!-- ✅ JavaScript（直接埋め込み） -->
 <script>
-  document.addEventListener("turbo:load", function() {
+  (function() {
+    const setupToggleView = () => {
+      const toggleBtn = document.getElementById("toggle-view-btn");
+      const cardView = document.getElementById("card-view");
+      const tableView = document.getElementById("table-view");
 
-    const toggleBtn = document.getElementById("toggle-view-btn");
-    const cardView = document.getElementById("card-view");
-    const tableView = document.getElementById("table-view");
+      toggleBtn.addEventListener("click", function() {
+        if (cardView.hidden) {
+          cardView.hidden = false;
+          tableView.hidden = true;
+          toggleBtn.textContent = "テーブル形式で表示";
+        } else {
+          cardView.hidden = true;
+          tableView.hidden = false;
+          toggleBtn.textContent = "カード形式で表示";
+        }
+      });
+    };
 
-    if (!toggleBtn || !cardView || !tableView) {
-      console.warn("⚠ 必要な要素が見つかりません");
-      return;
-    }
-
-    toggleBtn.addEventListener("click", function() {
-      if (cardView.hidden) {
-        // カード形式を表示
-        cardView.hidden = false;
-        tableView.hidden = true;
-        toggleBtn.textContent = "テーブル形式で表示";
-      } else {
-        // テーブル形式を表示
-        cardView.hidden = true;
-        tableView.hidden = false;
-        toggleBtn.textContent = "カード形式で表示";
-      }
-    });
-  });
+    document.addEventListener("turbo:load", setupToggleView);
+    document.addEventListener("turbo:render", setupToggleView);
+  })();
 </script>

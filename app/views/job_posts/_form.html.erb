@@ -25,36 +25,36 @@
     <div class="col-md-6">
       <div class="mb-3">
         <%= f.label :work_title, "案件名", class: "form-label fw-bold" %>
-        <%= f.text_field :work_title, class: "form-control", required: true %>
+        <%= f.text_field :work_title, class: "form-control", required: true, placeholder: "例: オフィスの電気配線工事" %>
       </div>
 
       <div class="mb-3">
         <%= f.label :work_location, "作業場所", class: "form-label fw-bold" %>
-        <%= f.text_field :work_location, class: "form-control", required: true, value: @job_post.work_location %>
+        <%= f.text_field :work_location, class: "form-control", required: true, value: @job_post.work_location, placeholder: "例: 東京都新宿区西新宿2-8-1" %>
       </div>
 
       <div class="mb-3">
         <%= f.label :work_description, "仕事内容", class: "form-label fw-bold" %>
-        <%= f.text_area :work_description, class: "form-control", rows: 4, required: true %>
+        <%= f.text_area :work_description, class: "form-control", rows: 4, required: true, placeholder: "例: オフィス内のコンセント増設工事。作業範囲は会議室・執務室の2か所。配線は露出配管で、使用するケーブルはVVF2.0-3C。施工時間は9:00〜17:00を予定。" %>
       </div>
 
       <div class="mb-3">
-        <%= f.label :work_capacity, "募集人数", class: "form-label fw-bold" %>
-        <%= f.number_field :work_capacity, class: "form-control", required: true, min: 1 %>
+        <%= f.label :work_capacity, "募集人数", class: "form-label fw-bold" %> <span class="text-muted">(1〜10人まで入力可)
+        <%= f.number_field :work_capacity, class: "form-control", required: true, min: 1, placeholder: "例: 5" %>
       </div>
 
       <div class="mb-3">
         <%= f.label :work_payment, "報酬 (円)", class: "form-label fw-bold" %>
-        <%= f.number_field :work_payment, class: "form-control", required: true, min: 0, value: (@job_post.work_payment || 0) %>
+        <%= f.number_field :work_payment, class: "form-control", required: true, placeholder: "20,000円以上を入力" %>
       </div>
 
       <div class="mb-3">
-        <%= f.label :work_start_date, "作業開始日", class: "form-label fw-bold" %>
+        <%= f.label :work_start_date, "作業開始日", class: "form-label fw-bold" %> <span class="text-muted">(明日以降を選択)</span>
         <%= f.date_field :work_start_date, class: "form-control", required: true %>
       </div>
 
       <div class="mb-3">
-        <%= f.label :work_end_date, "作業終了日", class: "form-label fw-bold" %>
+        <%= f.label :work_end_date, "作業終了日", class: "form-label fw-bold" %> <span class="text-muted">(作業開始日以降を選択)</span>
         <%= f.date_field :work_end_date, class: "form-control", required: true %>
       </div>
 
@@ -86,31 +86,32 @@
 
 <!-- ✅ JavaScript -->
 <script>
-  document.addEventListener("turbo:load", () => {
-    console.log("✅ JavaScript がロードされました");
+  (function() {
+    const setupImagePreview = () => {
+      console.log("✅ JavaScript がロードされました");
 
-    const mainImageInput = document.getElementById("main-image-input");
-    const mainPreview = document.getElementById("main-preview");
-    const removeMainImageButton = document.getElementById("remove-main-image");
-    const removeMainImageFlag = document.getElementById("remove-main-image-flag");
+      const mainImageInput = document.getElementById("main-image-input");
+      const mainPreview = document.getElementById("main-preview");
+      const removeMainImageButton = document.getElementById("remove-main-image");
+      const removeMainImageFlag = document.getElementById("remove-main-image-flag");
 
-    if (!mainImageInput || !mainPreview || !removeMainImageButton || !removeMainImageFlag) {
-      console.warn("⚠ 必要な要素が見つかりません");
-      return;
-    }
+      if (!mainImageInput || !mainPreview || !removeMainImageButton || !removeMainImageFlag) {
+        console.warn("⚠ 必要な要素が見つかりません");
+        return;
+      }
 
-    // ✅ 既存のイベントリスナーを全て削除
-    mainImageInput.replaceWith(mainImageInput.cloneNode(true));
-    removeMainImageButton.replaceWith(removeMainImageButton.cloneNode(true));
-    mainPreview.replaceWith(mainPreview.cloneNode(true));
+      // 既存のイベントリスナーを全て削除
+      mainImageInput.replaceWith(mainImageInput.cloneNode(true));
+      removeMainImageButton.replaceWith(removeMainImageButton.cloneNode(true));
+      mainPreview.replaceWith(mainPreview.cloneNode(true));
 
-    // ✅ クローンされた要素を取得（新しいイベントリスナーを追加するため）
-    const newMainImageInput = document.getElementById("main-image-input");
-    const newMainPreview = document.getElementById("main-preview");
-    const newRemoveMainImageButton = document.getElementById("remove-main-image");
+      // クローンされた要素を取得（新しいイベントリスナーを追加するため）
+      const newMainImageInput = document.getElementById("main-image-input");
+      const newMainPreview = document.getElementById("main-preview");
+      const newRemoveMainImageButton = document.getElementById("remove-main-image");
 
-      // ✅ 画像が選択されたときの処理
-    newMainImageInput.addEventListener("change", (event) => {
+      // 画像が選択されたときの処理
+      newMainImageInput.addEventListener("change", (event) => {
         console.log("✅ メイン画像が選択されました");
 
         if (!event.target.files.length) {
@@ -133,24 +134,28 @@
 
         const reader = new FileReader();
         reader.onload = (e) => {
-        newMainPreview.src = e.target.result;
+          newMainPreview.src = e.target.result;
           removeMainImageFlag.value = "false"; // 画像を選択したら削除フラグをオフ
         };
         reader.readAsDataURL(file);
-    });
+      });
 
-      // ✅ 削除ボタンが押されたときの処理
-    newRemoveMainImageButton.addEventListener("click", () => {
+      // 削除ボタンが押されたときの処理
+      newRemoveMainImageButton.addEventListener("click", () => {
         console.log("✅ メイン画像を削除しました");
-      newMainPreview.src = "/assets/noimage.png"; // デフォルト画像に変更
-      newMainImageInput.value = ""; // 選択したファイルをリセット
+        newMainPreview.src = "/assets/noimage.png"; // デフォルト画像に変更
+        newMainImageInput.value = ""; // 選択したファイルをリセット
         removeMainImageFlag.value = "true"; // 画像削除フラグをオン
-    });
+      });
 
-      // ✅ 画像プレビューをクリックで `input[type="file"]` を開く
-    newMainPreview.addEventListener("click", () => {
+      // 画像プレビューをクリックで `input[type="file"]` を開く
+      newMainPreview.addEventListener("click", () => {
         console.log("✅ メイン画像をクリックしました（ファイル選択を開く）");
-      newMainImageInput.click();
-    });
-  });
+        newMainImageInput.click();
+      });
+    };
+
+    document.addEventListener("turbo:load", setupImagePreview);
+    document.addEventListener("turbo:render", setupImagePreview);
+  })();
 </script>

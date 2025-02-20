@@ -80,6 +80,17 @@ class JobPostsController < ApplicationController
 
   # ✅ Strong Parameters（許可するパラメータ）
   def job_post_params
-    params.require(:job_post).permit(:work_title, :work_description, :work_capacity, :work_start_date, :work_end_date, :work_payment, :work_location, :work_status, :main_image)
+    params.require(:job_post).permit(
+      :work_title,
+      :work_description,
+      :work_capacity,
+      :work_start_date,
+      :work_end_date,
+      :work_payment,
+      :work_location,
+      :work_status,
+      :main_image,
+      :remove_main_image # 🔹 削除フラグを許可
+    )
   end
 end
