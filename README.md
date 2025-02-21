@@ -18,10 +18,15 @@ https://wakwak-works.onrender.com/
 
 # テスト用アカウント
 
+テストユーザー
+
+- ID : saitou@saitou
+- Pass : 1q1q1q
+
 Basic 認証
 
-- ID : admin
-- Pass : 2222
+- ID : @admin
+- Pass : @123qwe
 
 # 利用方法
 
@@ -118,18 +123,14 @@ Basic 認証
 - データベース: 開発環境（MySQL）、デプロイ環境（PostgreSQL）
 - テンプレートエンジン: ERB (Embedded Ruby)
 - リアルタイム機能: ActionCable
-
-👉 **使用サービス**
+- 地図機能: Google Maps API (位置情報の表示・バリデーションに使用) 👉 **使用サー
+  ビス**
 
 - バージョン管理: Git / GitHub
 - デプロイ先: Render
 - 画像・ファイル管理: ActiveStorage (Amazon S3)
 - 認証: Devise
 - 検索機能: Ransack
-
-# ローカルでの動作方法
-
-`git clone` してから、ローカルで動作をさせるまでに必要なコマンドを記載。
 
 # 工夫したポイント
 
