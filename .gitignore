@@ -36,3 +36,4 @@
 db/schema.rb
 test/
 dump.rdb
+.prettierignore
