@@ -7,7 +7,7 @@
         <!-- エラーメッセージの表示 -->
         <%= render "shared/error_messages", object: resource %>
 
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { novalidate: true }) do |f| %>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
           <div class="mb-3">
             <%= f.label :email, "メールアドレス", class: "form-label fw-bold" %>
