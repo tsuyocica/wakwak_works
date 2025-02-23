@@ -91,7 +91,7 @@ Basic 認証
 [アプリ利用ガイド](https://drive.google.com/file/d/10dBM7xrAM3ihrqRyN6R-2pp_HEVTMC8u/view?usp=drive_link)
 
 👉 **チャット画面（リアルタイム通信）**
-[![Image from Gyazo](https://gyazo.com/498aedee3d5c7e61a31040fedfe98ec1)]
+[![Image from Gyazo](https://i.gyazo.com/498aedee3d5c7e61a31040fedfe98ec1.gif)](https://gyazo.com/498aedee3d5c7e61a31040fedfe98ec1)
 
 # 実装予定の機能
 
