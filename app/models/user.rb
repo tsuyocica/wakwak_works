@@ -10,6 +10,8 @@ class User < ApplicationRecord
 
   # バリデーション
   validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }
+  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, format: { with: /\A(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+\z/, message: "は半角英数字の両方を含める必要があります" }, allow_nil: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :full_name, presence: true, length: { minimum: 2, maximum: 30 }
   validates :furigana, presence: true, format: { with: /\A[\p{hiragana}ー]+\z/, message: "はひらがなのみで入力してください" }, length: { minimum: 2, maximum: 30 }
