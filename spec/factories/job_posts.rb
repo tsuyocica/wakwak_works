@@ -7,7 +7,7 @@ FactoryBot.define do
     work_start_date { Date.tomorrow }
     work_end_date { Date.tomorrow + rand(1..7).days }
     work_payment { rand(20_000..9_999_999) }
-    work_location { 東京都 }
+    work_location { "東京都千代田区千代田1-1" }
     work_status { "recruiting" }
 
     # メイン画像を設定（JPEG形式）
